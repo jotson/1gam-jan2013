@@ -19,36 +19,11 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 
-require 'zoetrope'
-require 'shaders'
-require 'player'
-require 'hud'
+function drawHUD()
+    love.graphics.push()
+    love.graphics.setColor(255, 255, 255, 255)
 
-DEBUG = true
+    -- HUD stuff
 
-the.app = App:new{
-    name = "#onegameamonth jan/2013",
-    
-    onRun = function(self)
-        self:add(player)
-    end,
-
-    onUpdate = function(self)
-        if the.keys:pressed('w') then
-            player:thrust(nil, -THRUST)
-        end
-        if the.keys:pressed('s') then
-            player:thrust(nil, THRUST)
-        end
-        if the.keys:pressed('a') then
-            player:thrust(-THRUST, nil)
-        end
-        if the.keys:pressed('d') then
-            player:thrust(THRUST, nil)
-        end
-    end,
-
-    onDraw = function(self)
-        drawHUD()
-    end
-}
+    love.graphics.pop()
+end

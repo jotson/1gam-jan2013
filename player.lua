@@ -20,8 +20,12 @@
 -- SOFTWARE.
 
 THRUST = 60
+STARTING_FUEL = 100
+MAX_FUEL = 100
+FUEL_PER_SECOND = 20
 
 player = Sprite:new{
+    SEGMENTS = 8,
     x = 0,
     y = 0,
     acceleration = { x = 0, y = 0 },
@@ -30,14 +34,38 @@ player = Sprite:new{
     exhaust_period = 0.1,
     exhaust_elapsed = 0,
     is_thrusting = false,
+    fuel = STARTING_FUEL,
 
     draw = function(self)
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.setLineWidth(1)
-        love.graphics.circle("line", self.x, self.y, self.radius, 8)
+        love.graphics.circle("line", self.x, self.y, self.radius, self.SEGMENTS)
+
+        -- Draw fuel guage
+        if self.fuel > 0 then
+            a1 = -math.pi/2
+            a2 = -math.pi/2 + 2 * math.pi * self.fuel / MAX_FUEL
+            if self.fuel > MAX_FUEL * 0.5 then
+                love.graphics.setColor(0, 255, 0, 200)
+            elseif self.fuel > MAX_FUEL * 0.25 then
+                love.graphics.setColor(255, 255, 0, 200)
+            elseif self.fuel > MAX_FUEL * 0 then
+                love.graphics.setColor(255, 0, 0, 200)
+            end
+            love.graphics.arc("fill", self.x, self.y, self.radius-3, a1, a2, self.SEGMENTS)
+        else
+            -- love.graphics.setColor(255, 0, 0, 200)
+            -- love.graphics.print("E", self.x-4, self.y-7)
+            love.graphics.setColor(255, 0, 0, 200)
+            love.graphics.arc("line", self.x, self.y, self.radius/3, 0, math.pi * 2, self.SEGMENTS)
+        end
     end,
 
     thrust = function(self, x, y)
+        if self.fuel <= 0 then
+            return
+        end
+
         if x ~= nil then self.acceleration.x = x end
         if y ~= nil then self.acceleration.y = y end
 
@@ -46,6 +74,13 @@ player = Sprite:new{
         end
 
         self.is_thrusting = true
+    end,
+
+    addFuel = function(self, fuel)
+        self.fuel = self.fuel + fuel
+        if self.fuel <= 0 then
+            self.fuel = 0
+        end
     end,
 
     onNew = function(self)
@@ -84,6 +119,8 @@ player = Sprite:new{
         end
 
         if self.is_thrusting then
+            self:addFuel(-FUEL_PER_SECOND * dt)
+
             if self.exhaust_elapsed > self.exhaust_period then
                 the.view.factory:create(Exhaust)
                 self.exhaust_elapsed = 0
