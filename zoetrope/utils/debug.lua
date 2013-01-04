@@ -21,7 +21,7 @@ DebugConsole = Group:extend{
 	-- A table of modifier keys that must be held in order to activate
 	-- a debugging hotkey (set via <addHotkey()>). If you want hotkeys to
 	-- activate without having to hold any keys down, set this to nil.
-	hotkeyModifiers = {'ctrl', 'alt'},
+	hotkeyModifiers = {'ctrl'},
 
 	-- Property: watchBasics
 	-- If true, the console will automatically start watching the frames

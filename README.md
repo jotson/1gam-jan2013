@@ -38,3 +38,5 @@ Read an article about game mechanics at Wikipedia: http://en.wikipedia.org/wiki/
 ## January 4, 2013
 
 Added a thrust sound effect. I started with a short looping sample. I wanted it to fade in but that looked like it was going to take a hack so it turned out it was much simpler to just make the loop much longer (1 minute) and include the fade in at the beginning of the sample. Used Audacity to create the sound (brown noise generator + tone generator + filters).
+
+Added fuel consumption and a fuel gauge to the ship. I started on a HUD, and that was easy, but I've decided to try to make as many elements as possible visual instead of textual. The fuel gauge is drawn as a colored arc within the ship radius.

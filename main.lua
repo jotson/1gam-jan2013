@@ -19,12 +19,12 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 
+DEBUG = true
+
 require 'zoetrope'
 require 'shaders'
 require 'player'
 require 'hud'
-
-DEBUG = true
 
 the.app = App:new{
     name = "#onegameamonth jan/2013",
