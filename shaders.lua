@@ -19,31 +19,28 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 
-require 'zoetrope'
-require 'shaders'
-require 'player'
+shaders = {
+    bloom = love.graphics.newPixelEffect [[
+        vec2 image_size;
 
-DEBUG = true
+        vec4 effect(vec4 color, Image tex, vec2 tc, vec2 pc)
+        {
+            vec2 offset = vec2(1.0)/image_size;
+            color = Texel(tex, tc); // maybe add a weight here?
 
-the.app = App:new{
-    name = "#onegameamonth jan/2013",
-    
-    onRun = function(self)
-        self:add(player)
-    end,
+            color += Texel(tex, tc + vec2(-offset.x, offset.y));
+            color += Texel(tex, tc + vec2(0, offset.y));
+            color += Texel(tex, tc + vec2(offset.x, offset.y));
 
-    onUpdate = function(self)
-        if the.keys:pressed('w') then
-            player:thrust(nil, -THRUST)
-        end
-        if the.keys:pressed('s') then
-            player:thrust(nil, THRUST)
-        end
-        if the.keys:pressed('a') then
-            player:thrust(-THRUST, nil)
-        end
-        if the.keys:pressed('d') then
-            player:thrust(THRUST, nil)
-        end
-    end
+            color += Texel(tex, tc + vec2(-offset.x, 0));
+            color += Texel(tex, tc + vec2(0, 0));
+            color += Texel(tex, tc + vec2(offset.x, 0));
+
+            color += Texel(tex, tc + vec2(-offset.x, -offset.y));
+            color += Texel(tex, tc + vec2(0, -offset.y));
+            color += Texel(tex, tc + vec2(offset.x, -offset.y));
+
+            return color / 9.0; // use 10.0 for regular blurring.
+        }
+    ]]
 }

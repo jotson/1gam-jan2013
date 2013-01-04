@@ -1,18 +1,57 @@
+-- January2013
+-- Copyright © 2013 John Watson <john@watson-net.com>
+
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights to
+-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+-- the Software, and to permit persons to whom the Software is furnished to do so,
+-- subject to the following conditions:
+
+-- The above copyright notice and this permission notice shall be included in all
+-- copies or substantial portions of the Software.
+
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+-- SOFTWARE.
+
 THRUST = 60
 
 player = Sprite:new{
     x = 0,
     y = 0,
     acceleration = { x = 0, y = 0 },
-    drag = { x = THRUST/5, y = THRUST/5 },
+    drag = { x = THRUST/10, y = THRUST/10 },
     radius = 10,
+    exhaust_period = 0.1,
+    exhaust_elapsed = 0,
+    is_thrusting = false,
 
     draw = function(self)
         love.graphics.setColor(255, 255, 255, 255)
+        love.graphics.setLineWidth(1)
         love.graphics.circle("line", self.x, self.y, self.radius, 8)
     end,
 
+    thrust = function(self, x, y)
+        if x ~= nil then self.acceleration.x = x end
+        if y ~= nil then self.acceleration.y = y end
+
+        if self.thrust_snd:isStopped() then
+            love.audio.play(self.thrust_snd)
+        end
+
+        self.is_thrusting = true
+    end,
+
     onNew = function(self)
+        self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
+        self.thrust_snd:setLooping(true)
+
         self.x = love.graphics.getWidth()/2
         self.y = love.graphics.getHeight()/2
         self.width = self.radius
@@ -44,18 +83,25 @@ player = Sprite:new{
             self.vy = 0
         end
 
-        if self.acceleration.x ~= 0 or self.acceleration.y ~= 0 then
-            the.view.factory:create(Exhaust)
+        if self.is_thrusting then
+            if self.exhaust_elapsed > self.exhaust_period then
+                the.view.factory:create(Exhaust)
+                self.exhaust_elapsed = 0
+            end
+        else
+            self.thrust_snd:stop()
         end
+
+        self.exhaust_elapsed = self.exhaust_elapsed + dt
 
         self.acceleration.x = 0
         self.acceleration.y = 0
+        self.is_thrusting = false
     end
 }
 
 Exhaust = Sprite:extend{
-    radius = 1,
-    MAX_RADIUS = 4,
+    MAX_RADIUS = 3,
     lifetime = 0.5,
     elapsed = 0,
     alpha = 255,
@@ -71,10 +117,9 @@ Exhaust = Sprite:extend{
         a = math.max(math.abs(player.acceleration.x), math.abs(player.acceleration.y))
         self.x = player.x - player.radius * player.acceleration.x/a
         self.y = player.y - player.radius * player.acceleration.y/a
-        self.radius = 1
-        self.velocity.x = -player.acceleration.x + player.velocity.x + math.random(-THRUST/10,THRUST/10)
-        self.velocity.y = -player.acceleration.y + player.velocity.y + math.random(-THRUST/10,THRUST/10)
-        self.starting_alpha = math.random(50,255)
+        self.velocity.x = -player.acceleration.x*1.5 + player.velocity.x + math.random(-THRUST/10,THRUST/10)
+        self.velocity.y = -player.acceleration.y*1.5 + player.velocity.y + math.random(-THRUST/10,THRUST/10)
+        self.starting_alpha = math.random(255,255)
     end,
 
     onUpdate = function(self, dt)
@@ -84,7 +129,7 @@ Exhaust = Sprite:extend{
             return
         end
 
-        self.radius = self.MAX_RADIUS * self.elapsed/self.lifetime
+        self.radius = 1 + self.MAX_RADIUS * self.elapsed/self.lifetime
         self.alpha = self.starting_alpha * (1 - self.elapsed/self.lifetime)
     end,
 
