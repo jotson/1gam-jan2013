@@ -80,12 +80,14 @@ player = Sprite:new{
         self.fuel = self.fuel + fuel
         if self.fuel <= 0 then
             self.fuel = 0
+            love.audio.play(self.out_of_fuel_snd)
         end
     end,
 
     onNew = function(self)
         self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
         self.thrust_snd:setLooping(true)
+        self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
 
         self.x = love.graphics.getWidth()/2
         self.y = love.graphics.getHeight()/2
