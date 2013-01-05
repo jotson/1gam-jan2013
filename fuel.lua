@@ -31,15 +31,15 @@ Fuel = Sprite:extend{
         self.height = self.size
     end,
 
-    onDraw = function(self, dt)
+    onDraw = function(self, x, y)
         love.graphics.push()
 
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.setLineWidth(1)
-        love.graphics.translate(self.x, self.y)
+        love.graphics.translate(x, y)
         love.graphics.rotate(self.rotation)
         love.graphics.circle("line", 0, 0, self.size, 5)
-        
+
         love.graphics.pop()
     end,
 

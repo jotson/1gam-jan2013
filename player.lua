@@ -34,12 +34,12 @@ player = Sprite:new{
     is_thrusting = false,
     fuel = STARTING_FUEL,
 
-    draw = function(self)
+    onDraw = function(self, x, y)
         love.graphics.push()
 
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.setLineWidth(1)
-        love.graphics.circle("line", self.x, self.y, self.radius, self.SEGMENTS)
+        love.graphics.circle("line", x, y, self.radius, self.SEGMENTS)
 
         -- Draw fuel guage
         if self.fuel > 0 then
@@ -52,12 +52,12 @@ player = Sprite:new{
             elseif self.fuel > MAX_FUEL * 0 then
                 love.graphics.setColor(255, 0, 0, 200)
             end
-            love.graphics.arc("fill", self.x, self.y, self.radius-3, a1, a2, self.SEGMENTS)
+            love.graphics.arc("fill", x, y, self.radius-3, a1, a2, self.SEGMENTS)
         else
             -- love.graphics.setColor(255, 0, 0, 200)
             -- love.graphics.print("E", self.x-4, self.y-7)
             love.graphics.setColor(255, 0, 0, 200)
-            love.graphics.arc("line", self.x, self.y, self.radius/3, 0, math.pi * 2, self.SEGMENTS)
+            love.graphics.arc("line", x, y, self.radius/3, 0, math.pi * 2, self.SEGMENTS)
         end
 
         love.graphics.pop()
@@ -70,6 +70,11 @@ player = Sprite:new{
 
         if x ~= nil then self.acceleration.x = x end
         if y ~= nil then self.acceleration.y = y end
+
+        if self.exhaust_elapsed > self.exhaust_period then
+            the.view.factory:create(Exhaust)
+            self.exhaust_elapsed = 0
+        end
 
         if self.thrust_snd:isStopped() then
             love.audio.play(self.thrust_snd)
@@ -121,11 +126,6 @@ player = Sprite:new{
 
         if self.is_thrusting then
             self:addFuel(-FUEL_PER_SECOND * dt)
-
-            if self.exhaust_elapsed > self.exhaust_period then
-                the.view.factory:create(Exhaust)
-                self.exhaust_elapsed = 0
-            end
         else
             self.thrust_snd:stop()
         end
@@ -146,11 +146,9 @@ Exhaust = Sprite:extend{
 
     onNew = function(self)
         the.app:add(self)
-        self:onReset(self)
     end,
 
     onReset = function(self)
-        self.visible = true
         self.elapsed = 0
         a = math.max(math.abs(player.acceleration.x), math.abs(player.acceleration.y))
         self.x = player.x - player.radius * player.acceleration.x/a
@@ -158,21 +156,25 @@ Exhaust = Sprite:extend{
         self.velocity.x = -player.acceleration.x*1.5 + player.velocity.x + math.random(-THRUST/10,THRUST/10)
         self.velocity.y = -player.acceleration.y*1.5 + player.velocity.y + math.random(-THRUST/10,THRUST/10)
         self.starting_alpha = math.random(255,255)
+        self.radius = 1
     end,
 
     onUpdate = function(self, dt)
         self.elapsed = self.elapsed + dt
         if self.elapsed >= self.lifetime then
             the.view.factory:recycle(self)
-            return
         end
 
         self.radius = 1 + self.MAX_RADIUS * self.elapsed/self.lifetime
         self.alpha = self.starting_alpha * (1 - self.elapsed/self.lifetime)
     end,
 
-    draw = function(self)
+    onDraw = function(self, x, y)
+        love.graphics.push()
+
         love.graphics.setColor(255, 255, 255, self.alpha)
-        love.graphics.circle("line", self.x, self.y, self.radius, 10)
+        love.graphics.circle("line", x, y, self.radius, 10)
+
+        love.graphics.pop()
     end
 }

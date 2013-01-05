@@ -34,7 +34,8 @@ the.app = App:new{
     
     onRun = function(self)
         self:add(player)
-        fuel:create(5)
+        fuel:create(25)
+        -- self.view.focus = player
     end,
 
     onUpdate = function(self)
