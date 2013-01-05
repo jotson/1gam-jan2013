@@ -22,12 +22,10 @@
 THRUST = 60
 STARTING_FUEL = 100
 MAX_FUEL = 100
-FUEL_PER_SECOND = 20
+FUEL_PER_SECOND = 10
 
 player = Sprite:new{
     SEGMENTS = 8,
-    x = 0,
-    y = 0,
     acceleration = { x = 0, y = 0 },
     drag = { x = THRUST/10, y = THRUST/10 },
     radius = 10,
@@ -37,6 +35,8 @@ player = Sprite:new{
     fuel = STARTING_FUEL,
 
     draw = function(self)
+        love.graphics.push()
+
         love.graphics.setColor(255, 255, 255, 255)
         love.graphics.setLineWidth(1)
         love.graphics.circle("line", self.x, self.y, self.radius, self.SEGMENTS)
@@ -59,6 +59,8 @@ player = Sprite:new{
             love.graphics.setColor(255, 0, 0, 200)
             love.graphics.arc("line", self.x, self.y, self.radius/3, 0, math.pi * 2, self.SEGMENTS)
         end
+
+        love.graphics.pop()
     end,
 
     thrust = function(self, x, y)
@@ -107,17 +109,14 @@ player = Sprite:new{
         if self.x > love.graphics.getWidth() - self.radius then
             self.x = love.graphics.getWidth() - self.radius
             self.velocity.x = -self.velocity.x/2
-            self.vx = 0
         end
         if self.y < self.radius then
             self.y = self.radius
             self.velocity.y = -self.velocity.y/2
-            self.vy = 0
         end
         if self.y > love.graphics.getHeight() - self.radius then
             self.y = love.graphics.getHeight() - self.radius
             self.velocity.y = -self.velocity.y/2
-            self.vy = 0
         end
 
         if self.is_thrusting then

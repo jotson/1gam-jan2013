@@ -24,13 +24,17 @@ DEBUG = true
 require 'zoetrope'
 require 'shaders'
 require 'player'
+require 'fuel'
 require 'hud'
 
 the.app = App:new{
     name = "#onegameamonth jan/2013",
+
+    fuel = {},
     
     onRun = function(self)
         self:add(player)
+        fuel:create(5)
     end,
 
     onUpdate = function(self)
@@ -49,6 +53,10 @@ the.app = App:new{
     end,
 
     onDraw = function(self)
+        love.graphics.push()
+
         drawHUD()
+
+        love.graphics.pop()
     end
 }

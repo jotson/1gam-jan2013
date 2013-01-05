@@ -21,6 +21,7 @@
 
 function drawHUD()
     love.graphics.push()
+    
     love.graphics.setColor(255, 255, 255, 255)
 
     -- HUD stuff
