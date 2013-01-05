@@ -71,11 +71,6 @@ player = Sprite:new{
         if x ~= nil then self.acceleration.x = x end
         if y ~= nil then self.acceleration.y = y end
 
-        if self.exhaust_elapsed > self.exhaust_period then
-            the.view.factory:create(Exhaust)
-            self.exhaust_elapsed = 0
-        end
-
         if self.thrust_snd:isStopped() then
             love.audio.play(self.thrust_snd)
         end
@@ -96,8 +91,8 @@ player = Sprite:new{
         self.thrust_snd:setLooping(true)
         self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
 
-        self.x = love.graphics.getWidth()/2
-        self.y = love.graphics.getHeight()/2
+        self.x = arena.width/2
+        self.y = arena.height/2
         self.width = self.radius
         self.height = self.radius
         self.maxVelocity.x = 100
@@ -109,23 +104,28 @@ player = Sprite:new{
     onUpdate = function(self, dt)
         if self.x < self.radius then
             self.x = self.radius
-            self.velocity.x = -self.velocity.x/2
+            self.velocity.x = -self.velocity.x
         end
-        if self.x > love.graphics.getWidth() - self.radius then
-            self.x = love.graphics.getWidth() - self.radius
-            self.velocity.x = -self.velocity.x/2
+        if self.x > arena.width - self.radius then
+            self.x = arena.width - self.radius
+            self.velocity.x = -self.velocity.x
         end
         if self.y < self.radius then
             self.y = self.radius
-            self.velocity.y = -self.velocity.y/2
+            self.velocity.y = -self.velocity.y
         end
-        if self.y > love.graphics.getHeight() - self.radius then
-            self.y = love.graphics.getHeight() - self.radius
-            self.velocity.y = -self.velocity.y/2
+        if self.y > arena.height - self.radius then
+            self.y = arena.height - self.radius
+            self.velocity.y = -self.velocity.y
         end
 
         if self.is_thrusting then
             self:addFuel(-FUEL_PER_SECOND * dt)
+
+            if self.exhaust_elapsed > self.exhaust_period then
+                the.view.factory:create(Exhaust)
+                self.exhaust_elapsed = 0
+            end
         else
             self.thrust_snd:stop()
         end

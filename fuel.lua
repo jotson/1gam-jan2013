@@ -23,8 +23,8 @@ Fuel = Sprite:extend{
     acceleration = { x = 0, y = 0 },
 
     onNew = function(self)
-        self.x = math.random(0, love.graphics.getWidth())
-        self.y = math.random(0, love.graphics.getHeight())
+        self.x = math.random(0, arena.width)
+        self.y = math.random(0, arena.height)
         self.velocity = { x = math.random(-25,25) , y = math.random(-25,25), rotation = math.random(-math.pi, math.pi) }
         self.size = math.random(5,30)
         self.width = self.size
@@ -69,16 +69,16 @@ Fuel = Sprite:extend{
             self.x = self.size
             self.velocity.x = -self.velocity.x
         end
-        if self.x > love.graphics.getWidth() - self.size then
-            self.x = love.graphics.getWidth() - self.size
+        if self.x > arena.width - self.size then
+            self.x = arena.width - self.size
             self.velocity.x = -self.velocity.x
         end
         if self.y < self.size then
             self.y = self.size
             self.velocity.y = -self.velocity.y
         end
-        if self.y > love.graphics.getHeight() - self.size then
-            self.y = love.graphics.getHeight() - self.size
+        if self.y > arena.height - self.size then
+            self.y = arena.height - self.size
             self.velocity.y = -self.velocity.y
         end
     end,

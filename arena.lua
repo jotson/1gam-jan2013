@@ -19,45 +19,9 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 
-DEBUG = true
-STRICT = true
-
-require 'zoetrope'
-require 'shaders'
-require 'arena'
-require 'player'
-require 'fuel'
-require 'hud'
-
-the.app = App:new{
-    name = "#onegameamonth jan/2013",
-
-    fuel = {},
-    
-    onRun = function(self)
-        self:add(arena)
-        self:add(player)
-        fuel:create(25)
-        -- self.view.focus = player
-        -- self.view:clampTo(arena)
-    end,
-
-    onUpdate = function(self)
-        if the.keys:pressed('w') then
-            player:thrust(nil, -THRUST)
-        end
-        if the.keys:pressed('s') then
-            player:thrust(nil, THRUST)
-        end
-        if the.keys:pressed('a') then
-            player:thrust(-THRUST, nil)
-        end
-        if the.keys:pressed('d') then
-            player:thrust(THRUST, nil)
-        end
-    end,
-
-    onDraw = function(self)
-        drawHUD()
-    end
+arena = Fill:extend{
+    width = love.graphics.getWidth(),
+    height = love.graphics.getHeight(),
+    fill = { 0, 0, 0, 0 },
+    border = { 255, 255, 255, 255 }
 }
