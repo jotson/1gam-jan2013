@@ -143,6 +143,8 @@ Exhaust = Sprite:extend{
     lifetime = 0.5,
     elapsed = 0,
     alpha = 255,
+    width = 1,
+    height = 1,
 
     onNew = function(self)
         the.app:add(self)

@@ -40,3 +40,11 @@ Read an article about game mechanics at Wikipedia: http://en.wikipedia.org/wiki/
 Added a thrust sound effect. I started with a short looping sample. I wanted it to fade in but that looked like it was going to take a hack so it turned out it was much simpler to just make the loop much longer (1 minute) and include the fade in at the beginning of the sample. Used Audacity to create the sound (brown noise generator + tone generator + filters).
 
 Added fuel consumption and a fuel gauge to the ship. I started on a HUD, and that was easy, but I've decided to try to make as many elements as possible visual instead of textual. The fuel gauge is drawn as a colored arc within the ship radius.
+
+Added fuel that can be collected by colliding with it.
+
+Did some experimenting with camera following the player and found that I'd written my sprite drawing methods in a way that prevented it from working. Rewrote those correctly and now everything works as expected (camera following the player is kind of neat) except that my thrust particles don't seem to be receiving their coordinates correctly from the framework for some reason. It's like they're not part of the update loop. Can't see the solution right now. It'll probably come to me in the morning.
+
+Got it! With Zoetrope, sprite's might not be drawn correctly unless they have a width and height > 0.
+
+Time: 3 hours

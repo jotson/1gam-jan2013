@@ -54,10 +54,6 @@ the.app = App:new{
     end,
 
     onDraw = function(self)
-        love.graphics.push()
-
         drawHUD()
-
-        love.graphics.pop()
     end
 }
