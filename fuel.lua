@@ -34,6 +34,7 @@ Fuel = Sprite:extend{
         self.velocity = { x = math.random(-25,25) , y = math.random(-25,25), rotation = math.random(-math.pi, math.pi) }
         self.fuel = math.random(5,30)
         self.radius = self.fuel * self.FUEL_SIZE_RATIO
+        if self.radius < 1 then self.radius = 1 end
         self.width = self.radius
         self.height = self.radius
 
@@ -48,7 +49,7 @@ Fuel = Sprite:extend{
         love.graphics.setLineWidth(1)
 
         if self.state == self.STATE_EVAPORATING then
-            love.graphics.setColor(255, 255, 255, 100)
+            love.graphics.setColor(255, 255, 255, 255 * math.random())
             love.graphics.line(x, y, player.x + the.view.translate.x, player.y + the.view.translate.y)
             love.graphics.setColor(255, 0, 0, 255 * self.alpha)
         else
@@ -86,6 +87,7 @@ Fuel = Sprite:extend{
             player:addFuel(self.FUEL_DRAIN_PER_SECOND * dt)
             self.fuel = self.fuel - self.FUEL_DRAIN_PER_SECOND * dt
             self.radius = self.fuel * self.FUEL_SIZE_RATIO
+            if self.radius < 1 then self.radius = 1 end
 
             if self.fuel <= 0 then
                 fuel:destroy(self)

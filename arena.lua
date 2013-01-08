@@ -21,7 +21,7 @@
 
 arena = Fill:extend{
     width = love.graphics.getWidth(),
-    height = love.graphics.getHeight(),
+    height = love.graphics.getHeight() - 100,
     fill = { 0, 0, 0, 0 },
-    border = { 255, 255, 255, 255 }
+    border = { 255, 255, 255, 50 }
 }

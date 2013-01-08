@@ -29,7 +29,7 @@ I'm finding that I have to keep reminding myself not to polish. I spent a long t
 
 On the other hand, I'm finding that it's fun to do a little polishing here and there and to jump between subjects (mechanics to graphics to sound) to keep things interesting. When I get bored doing one thing, there's always something else I can jump to.
 
-Time: about 5 hours
+Hours: 5
 
 ## January 3, 2013
 
@@ -47,10 +47,17 @@ Did some experimenting with camera following the player and found that I'd writt
 
 Got it! With Zoetrope, sprite's might not be drawn correctly unless they have a width and height > 0.
 
-Time: 3 hours
+Hours: 3
 
 ## January 7, 2013
 
 Added a simple animation to show fuel being absorbed into the player ship. It works by checking for a "collision" between the fuel pods and the ship. All of the collision detection and animation code is in the fuel pods rather than the ship. If it was in the ship, I'd have to code a loop to check for collisions with each fuel pod.
 
 Changed mechanics a little so that the ship's fuel can only increase to a maximum amount. Any fuel collected beyond that is added to a surplus fuel counter which I'm thinking is, essentially, the player score.
+
+Hours: 1
+
+## January 8, 2013
+
+Tweaking mechanics again. Lesson learned: designing a game and tweaking behavior is very time consuming. I may just set out to just flat out clone something next month.
+
