@@ -20,65 +20,92 @@
 -- SOFTWARE.
 
 Fuel = Sprite:extend{
+    STATE_FLOATING = 1,
+    STATE_EVAPORATING = 2,
+    FUEL_DRAIN_PER_SECOND = 40,
+
     acceleration = { x = 0, y = 0 },
+    alpha = 0,
 
     onNew = function(self)
         self.x = math.random(0, arena.width)
         self.y = math.random(0, arena.height)
         self.velocity = { x = math.random(-25,25) , y = math.random(-25,25), rotation = math.random(-math.pi, math.pi) }
-        self.size = math.random(5,30)
-        self.width = self.size
-        self.height = self.size
+        self.fuel = math.random(10,50)
+        self.radius = self.fuel * 0.25
+        self.width = self.radius
+        self.height = self.radius
+
+        the.view.tween:start(self, 'alpha', 1, 0.75)
+
+        self.state = self.STATE_FLOATING
     end,
 
     onDraw = function(self, x, y)
         love.graphics.push()
 
-        love.graphics.setColor(255, 255, 255, 255)
         love.graphics.setLineWidth(1)
+
+        if self.state == self.STATE_EVAPORATING then
+            love.graphics.setColor(255, 255, 255, 100)
+            love.graphics.line(x, y, player.x + the.view.translate.x, player.y + the.view.translate.y)
+            love.graphics.setColor(255, 0, 0, 255 * self.alpha)
+        else
+            love.graphics.setColor(255, 255, 255, 255 * self.alpha)
+        end
+
         love.graphics.translate(x, y)
         love.graphics.rotate(self.rotation)
-        love.graphics.circle("line", 0, 0, self.size, 5)
+        love.graphics.circle("line", 0, 0, self.radius, 5)
 
         love.graphics.pop()
     end,
 
-    onCollide = function(self, other, x_overlap, y_overlap)
-        if other == player then
-            player:addFuel(self.size)
-            fuel:destroy(self)
-            return
-        end
+    collide = function(self, other)
+        if self:distanceTo(other) <= other.radius * 4 then
+            if self.onCollide then
+                self:onCollide(other, 0, 0)
+            end
+            
+            if other.onCollide then
+                other:onCollide(self, 0, 0)
+            end
 
-        -- for i = 1, table.getn(fuel.list) do
-        --     if other == fuel.list[i] then
-        --         -- collision with another fuel
-        --         return
-        --     end
-        -- end
+            return true
+        end
+        return false
     end,
 
     onUpdate = function(self, dt)
-        self:collide(player)
+        self.state = self.STATE_FLOATING
 
-        -- for i = 1, table.getn(fuel.list) do
-        --     self:collide(fuel.list[i])
-        -- end
+        if self:collide(player) then
+            self.state = self.STATE_EVAPORATING
 
-        if self.x < self.size then
-            self.x = self.size
+            player:addFuel(self.FUEL_DRAIN_PER_SECOND * dt)
+            self.fuel = self.fuel - self.FUEL_DRAIN_PER_SECOND * dt
+            self.radius = self.fuel * 0.25
+
+            if self.fuel <= 0 then
+                fuel:destroy(self)
+                fuel:create(1)
+            end
+        end
+
+        if self.x < self.radius then
+            self.x = self.radius
             self.velocity.x = -self.velocity.x
         end
-        if self.x > arena.width - self.size then
-            self.x = arena.width - self.size
+        if self.x > arena.width - self.radius then
+            self.x = arena.width - self.radius
             self.velocity.x = -self.velocity.x
         end
-        if self.y < self.size then
-            self.y = self.size
+        if self.y < self.radius then
+            self.y = self.radius
             self.velocity.y = -self.velocity.y
         end
-        if self.y > arena.height - self.size then
-            self.y = arena.height - self.size
+        if self.y > arena.height - self.radius then
+            self.y = arena.height - self.radius
             self.velocity.y = -self.velocity.y
         end
     end,

@@ -48,3 +48,7 @@ Did some experimenting with camera following the player and found that I'd writt
 Got it! With Zoetrope, sprite's might not be drawn correctly unless they have a width and height > 0.
 
 Time: 3 hours
+
+## January 7, 2013
+
+Added a simple animation to show fuel being absorbed into the player ship. It works by checking for a "collision" between the fuel pods and the ship. All of the collision detection and animation code is in the fuel pods rather than the ship. If it was in the ship, I'd have to code a loop to check for collisions with each fuel pod.
