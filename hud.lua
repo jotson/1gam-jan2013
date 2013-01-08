@@ -23,6 +23,8 @@ function drawHUD()
     love.graphics.push()
 
     -- HUD stuff
+    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.print("Surplus fuel: " .. math.ceil(the.app.surplus_fuel), 50, 50)
 
     love.graphics.pop()
 end

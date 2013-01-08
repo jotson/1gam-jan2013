@@ -23,6 +23,7 @@ Fuel = Sprite:extend{
     STATE_FLOATING = 1,
     STATE_EVAPORATING = 2,
     FUEL_DRAIN_PER_SECOND = 40,
+    FUEL_SIZE_RATIO = 0.5,
 
     acceleration = { x = 0, y = 0 },
     alpha = 0,
@@ -31,8 +32,8 @@ Fuel = Sprite:extend{
         self.x = math.random(0, arena.width)
         self.y = math.random(0, arena.height)
         self.velocity = { x = math.random(-25,25) , y = math.random(-25,25), rotation = math.random(-math.pi, math.pi) }
-        self.fuel = math.random(10,50)
-        self.radius = self.fuel * 0.25
+        self.fuel = math.random(5,30)
+        self.radius = self.fuel * self.FUEL_SIZE_RATIO
         self.width = self.radius
         self.height = self.radius
 
@@ -84,7 +85,7 @@ Fuel = Sprite:extend{
 
             player:addFuel(self.FUEL_DRAIN_PER_SECOND * dt)
             self.fuel = self.fuel - self.FUEL_DRAIN_PER_SECOND * dt
-            self.radius = self.fuel * 0.25
+            self.radius = self.fuel * self.FUEL_SIZE_RATIO
 
             if self.fuel <= 0 then
                 fuel:destroy(self)

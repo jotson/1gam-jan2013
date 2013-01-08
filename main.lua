@@ -33,11 +33,13 @@ the.app = App:new{
     name = "#onegameamonth jan/2013",
 
     fuel = {},
+
+    surplus_fuel = 0,
     
     onRun = function(self)
         self:add(arena)
         self:add(player)
-        fuel:create(25)
+        fuel:create(20)
         -- self.view.focus = player
         -- self.view:clampTo(arena)
     end,

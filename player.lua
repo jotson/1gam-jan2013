@@ -22,7 +22,7 @@
 THRUST = 60
 STARTING_FUEL = 100
 MAX_FUEL = 100
-FUEL_PER_SECOND = 10
+FUEL_BURN_PER_SECOND = 25
 
 player = Sprite:new{
     SEGMENTS = 8,
@@ -79,7 +79,11 @@ player = Sprite:new{
     end,
 
     addFuel = function(self, fuel)
-        self.fuel = self.fuel + fuel
+        if fuel > 0 and self.fuel >= MAX_FUEL then
+            the.app.surplus_fuel = the.app.surplus_fuel + fuel
+        else
+            self.fuel = self.fuel + fuel
+        end
         if self.fuel <= 0 then
             self.fuel = 0
             love.audio.play(self.out_of_fuel_snd)
@@ -120,7 +124,7 @@ player = Sprite:new{
         end
 
         if self.is_thrusting then
-            self:addFuel(-FUEL_PER_SECOND * dt)
+            self:addFuel(-FUEL_BURN_PER_SECOND * dt)
 
             if self.exhaust_elapsed > self.exhaust_period then
                 the.view.factory:create(Exhaust)
