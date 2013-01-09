@@ -61,3 +61,5 @@ Hours: 1
 
 Tweaking mechanics again. Lesson learned: designing a game and tweaking behavior is very time consuming. I may just set out to just flat out clone something next month.
 
+Added some camera shake when thrusting hard off the currrent vector of movement.
+

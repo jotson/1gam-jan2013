@@ -33,6 +33,7 @@ player = Sprite:new{
     exhaust_elapsed = 0,
     is_thrusting = false,
     fuel = STARTING_FUEL,
+    speed = 0,
 
     onDraw = function(self, x, y)
         love.graphics.push()
@@ -75,6 +76,20 @@ player = Sprite:new{
             love.audio.play(self.thrust_snd)
         end
 
+        -- This basically says, if we're thrusting in the opposite direction that we're moving,
+        -- then shake the camera an amount proportional to the player's current speed.
+        if (self.acceleration.x ~= 0 and self.acceleration.x/math.abs(self.acceleration.x) ~= self.velocity.x/math.abs(self.velocity.x)) then
+            the.app.shake = self.speed * 0.01
+        end
+        if (self.acceleration.y ~= 0 and self.acceleration.y/math.abs(self.acceleration.y) ~= self.velocity.y/math.abs(self.velocity.y)) then
+            the.app.shake = self.speed * 0.01
+        end
+        if the.app.shake ~= 0 then
+            -- if self.thrust_snd2:isStopped() then
+            --     love.audio.play(self.thrust_snd2)
+            -- end
+        end
+
         self.is_thrusting = true
     end,
 
@@ -93,6 +108,8 @@ player = Sprite:new{
     onNew = function(self)
         self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
         self.thrust_snd:setLooping(true)
+        -- self.thrust_snd2 = love.audio.newSource("snd/thrust2.ogg", "static")
+        -- self.thrust_snd2:setVolume(0.2)
         self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
 
         self.x = arena.width/2
@@ -132,7 +149,11 @@ player = Sprite:new{
             end
         else
             self.thrust_snd:stop()
+            -- self.thrust_snd2:stop()
         end
+
+        -- Calculate speed (velocity magnitude)
+        self.speed = math.sqrt(self.velocity.x * self.velocity.x + self.velocity.y * self.velocity.y)
 
         self.exhaust_elapsed = self.exhaust_elapsed + dt
 

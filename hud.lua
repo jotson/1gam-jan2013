@@ -25,6 +25,7 @@ function drawHUD()
     -- HUD stuff
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.print("Surplus fuel: " .. math.ceil(the.app.surplus_fuel), 50, 50)
+    love.graphics.print("Accel x: " .. (player.acceleration.x or 1)/math.abs(player.acceleration.x or 1) .. " Vel x: " .. player.velocity.x/math.abs(player.velocity.x), 50, 70)
 
     love.graphics.pop()
 end

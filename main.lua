@@ -35,7 +35,9 @@ the.app = App:new{
     fuel = {},
 
     surplus_fuel = 0,
-    
+
+    shake = 0,
+
     onRun = function(self)
         self:add(arena)
         self:add(player)
@@ -61,5 +63,11 @@ the.app = App:new{
 
     onDraw = function(self)
         drawHUD()
+
+        -- Simple camera shake
+        if self.shake ~= 0 then
+            the.view:panTo({ love.graphics.getWidth()/2 + math.random(-self.shake, self.shake), love.graphics.getHeight()/2 + math.random(-self.shake, self.shake)}, 0)
+        end
+        self.shake = 0
     end
 }
