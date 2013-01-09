@@ -42,6 +42,8 @@ player = Sprite:new{
         -- self.thrust_snd2 = love.audio.newSource("snd/thrust2.ogg", "static")
         -- self.thrust_snd2:setVolume(0.2)
         self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
+        self.explosion_snd = love.audio.newSource("snd/explosion.ogg", "static")
+        self.bounce_snd = love.audio.newSource("snd/bounce.ogg", "static")
 
         self.x = arena.width/2
         self.y = arena.height/2
@@ -117,6 +119,8 @@ player = Sprite:new{
         self.explosion_emitter.x = self.x
         self.explosion_emitter.y = self.y
         self.explosion_emitter:explode()
+
+        love.audio.play(self.explosion_snd)
     end,
 
     thrust = function(self, x, y)
@@ -168,18 +172,26 @@ player = Sprite:new{
         if self.x < self.radius then
             self.x = self.radius
             self.velocity.x = -self.velocity.x
+            self.bounce_snd:stop()
+            love.audio.play(self.bounce_snd)
         end
         if self.x > arena.width - self.radius then
             self.x = arena.width - self.radius
             self.velocity.x = -self.velocity.x
+            self.bounce_snd:stop()
+            love.audio.play(self.bounce_snd)
         end
         if self.y < self.radius then
             self.y = self.radius
             self.velocity.y = -self.velocity.y
+            self.bounce_snd:stop()
+            love.audio.play(self.bounce_snd)
         end
         if self.y > arena.height - self.radius then
             self.y = arena.height - self.radius
             self.velocity.y = -self.velocity.y
+            self.bounce_snd:stop()
+            love.audio.play(self.bounce_snd)
         end
 
         if self.is_thrusting then

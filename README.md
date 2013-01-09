@@ -68,3 +68,5 @@ Added enemies that scan for the player and home in if the player is within a cer
 ## January 9, 2013
 
 Added "gravity" to the tractor beam so that there is a slight pull towards the fuel pods as they are being absorbed by the player. I'm aiming for a somewhat subtle effect. It can be used by players to line up their runs to collect as much fuel as possible without thrusters. The extra pull encourages players to develop a flow, slingshotting themselves from one fuel pod to the next.
+
+Used http://www.bfxr.net/ to make some sound effects.

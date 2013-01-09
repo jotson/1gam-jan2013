@@ -30,6 +30,9 @@ Fuel = Sprite:extend{
     alpha = 0,
 
     onNew = function(self)
+        self.tractor_snd = love.audio.newSource("snd/tractor_beam.ogg", "stream")
+        self.tractor_snd:setVolume(0.25)
+
         self.x = math.random(0, arena.width)
         self.y = math.random(0, arena.height)
         self.fuel = math.random(5,30)
@@ -88,6 +91,10 @@ Fuel = Sprite:extend{
             if player.state == player.STATE_ALIVE then
                 self.state = self.STATE_EVAPORATING
 
+                if self.tractor_snd:isStopped() then
+                    love.audio.play(self.tractor_snd)
+                end
+
                 -- Calculate vector to player and pull him in
                 local dx = self.x - player.x
                 local dy = self.y - player.y
@@ -100,9 +107,14 @@ Fuel = Sprite:extend{
                 self.radius = self.fuel * self.FUEL_SIZE_RATIO
 
                 if self.fuel <= 0 then
+                    self.tractor_snd:stop()
                     fuel:destroy(self)
                     fuel:create(1)
                 end
+            end
+        else
+            if not self.tractor_snd:isStopped() then
+                self.tractor_snd:stop()
             end
         end
 
