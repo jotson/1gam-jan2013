@@ -58,10 +58,10 @@ Enemy = Sprite:extend{
         -- Detection radius
         if self.state == self.STATE_IDLE then
         else
-            love.graphics.setColor(255, 0, 0, math.random(50, 200))
+            love.graphics.setColor(255, 0, 0, math.random(0, 200))
             love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE, 20)
         end
-        love.graphics.setColor(255, 0, 0, self.alpha * 30)
+        love.graphics.setColor(255, 0, 0, self.alpha * 50)
         love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE * math.sin(love.timer.getMicroTime()*3+self.offset), 20)
         love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE * math.sin(love.timer.getMicroTime()*18+self.offset), 20)
         love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE * math.sin(love.timer.getMicroTime()*32+self.offset), 20)

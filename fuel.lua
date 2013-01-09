@@ -24,6 +24,7 @@ Fuel = Sprite:extend{
     STATE_EVAPORATING = 2,
     FUEL_DRAIN_PER_SECOND = 40,
     FUEL_SIZE_RATIO = 0.5,
+    TRACTOR_GRAVITY = 20,
 
     acceleration = { x = 0, y = 0 },
     alpha = 0,
@@ -86,6 +87,13 @@ Fuel = Sprite:extend{
         if self:collide(player) then
             if player.state == player.STATE_ALIVE then
                 self.state = self.STATE_EVAPORATING
+
+                -- Calculate vector to player and pull him in
+                local dx = self.x - player.x
+                local dy = self.y - player.y
+                local n = math.max(math.abs(dx), math.abs(dy))
+                player.acceleration.x = dx/n * self.TRACTOR_GRAVITY
+                player.acceleration.y = dy/n * self.TRACTOR_GRAVITY
 
                 player:addFuel(self.FUEL_DRAIN_PER_SECOND * dt)
                 self.fuel = self.fuel - self.FUEL_DRAIN_PER_SECOND * dt
