@@ -23,5 +23,50 @@ arena = Fill:extend{
     width = love.graphics.getWidth(),
     height = love.graphics.getHeight() - 100,
     fill = { 0, 0, 0, 0 },
-    border = { 255, 255, 255, 50 }
+    border = { 255, 255, 255, 50 },
+
+    highlightWall = function(self, x, y)
+        local o = the.view.factory:create(arenaBounceHighlight)
+        if x == 0 then
+            o.x = 1
+            o.y = y - o.MAX_SIZE/2
+            o.width = 1
+            o.height = o.MAX_SIZE
+        elseif x == arena.width then
+            o.x = arena.width - 1
+            o.y = y - o.MAX_SIZE/2
+            o.width = 1
+            o.height = o.MAX_SIZE
+        elseif y == 0 then
+            o.x = x - o.MAX_SIZE/2
+            o.y = 1
+            o.width = o.MAX_SIZE
+            o.height = 1
+        elseif y == arena.height then
+            o.x = x - o.MAX_SIZE/2
+            o.y = arena.height - 1
+            o.width = o.MAX_SIZE
+            o.height = 1
+        end
+    end,
+}
+
+arenaBounceHighlight = Fill:extend{
+    MAX_SIZE = 60,
+    width = 1,
+    height = 1,
+    fill = { 100, 200, 255, 255 },
+    border = { 0, 0, 0, 0 },
+
+    onNew = function(self)
+        the.app:add(self)
+    end,
+
+    onReset = function(self)
+        self.alpha = 1
+
+        the.view.tween
+            :start(self, 'alpha', 0, 1)
+            :andThen(function() the.view.factory:recycle(self) end)
+    end
 }

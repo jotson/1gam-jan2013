@@ -174,24 +174,28 @@ player = Sprite:new{
             self.velocity.x = -self.velocity.x
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
+            arena:highlightWall(0, self.y)
         end
         if self.x > arena.width - self.radius then
             self.x = arena.width - self.radius
             self.velocity.x = -self.velocity.x
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
+            arena:highlightWall(arena.width, self.y)
         end
         if self.y < self.radius then
             self.y = self.radius
             self.velocity.y = -self.velocity.y
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
+            arena:highlightWall(self.x, 0)
         end
         if self.y > arena.height - self.radius then
             self.y = arena.height - self.radius
             self.velocity.y = -self.velocity.y
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
+            arena:highlightWall(self.x, arena.height)
         end
 
         if self.is_thrusting then
