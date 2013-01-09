@@ -34,7 +34,6 @@ Fuel = Sprite:extend{
         self.velocity = { x = math.random(-25,25) , y = math.random(-25,25), rotation = math.random(-math.pi, math.pi) }
         self.fuel = math.random(5,30)
         self.radius = self.fuel * self.FUEL_SIZE_RATIO
-        if self.radius < 1 then self.radius = 1 end
         self.width = self.radius
         self.height = self.radius
 
@@ -58,7 +57,10 @@ Fuel = Sprite:extend{
 
         love.graphics.translate(x, y)
         love.graphics.rotate(self.rotation)
-        love.graphics.circle("line", 0, 0, self.radius, 5)
+        
+        local radius = self.radius
+        if radius < 2 then radius = 2 end
+        love.graphics.circle("line", 0, 0, radius, 5)
 
         love.graphics.pop()
     end,
@@ -87,7 +89,6 @@ Fuel = Sprite:extend{
             player:addFuel(self.FUEL_DRAIN_PER_SECOND * dt)
             self.fuel = self.fuel - self.FUEL_DRAIN_PER_SECOND * dt
             self.radius = self.fuel * self.FUEL_SIZE_RATIO
-            if self.radius < 1 then self.radius = 1 end
 
             if self.fuel <= 0 then
                 fuel:destroy(self)
@@ -121,7 +122,7 @@ fuel = {
         if n == nil then n = 1 end
 
         for i = 1,n do
-            f = Fuel:new()
+            local f = Fuel:new()
             table.insert(self.list, f)
             the.app:add(f)
         end

@@ -31,11 +31,8 @@ require 'hud'
 
 the.app = App:new{
     name = "#onegameamonth jan/2013",
-
     fuel = {},
-
     surplus_fuel = 0,
-
     shake = 0,
 
     onRun = function(self)

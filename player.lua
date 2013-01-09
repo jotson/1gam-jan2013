@@ -177,7 +177,7 @@ Exhaust = Sprite:extend{
 
     onReset = function(self)
         self.elapsed = 0
-        a = math.max(math.abs(player.acceleration.x), math.abs(player.acceleration.y))
+        local a = math.max(math.abs(player.acceleration.x), math.abs(player.acceleration.y))
         self.x = player.x - player.radius * player.acceleration.x/a
         self.y = player.y - player.radius * player.acceleration.y/a
         self.velocity.x = -player.acceleration.x*1.5 + player.velocity.x + math.random(-THRUST/10,THRUST/10)
