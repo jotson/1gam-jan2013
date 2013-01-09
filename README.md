@@ -63,3 +63,4 @@ Tweaking mechanics again. Lesson learned: designing a game and tweaking behavior
 
 Added some camera shake when thrusting hard off the currrent vector of movement.
 
+Added enemies that scan for the player and home in if the player is within a certain radius.

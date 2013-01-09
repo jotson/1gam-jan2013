@@ -19,52 +19,109 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 
-THRUST = 60
-STARTING_FUEL = 100
-MAX_FUEL = 100
-FUEL_BURN_PER_SECOND = 25
-
 player = Sprite:new{
+    STATE_ALIVE = 1,
+    STATE_DEAD = 2,
+    THRUST = 60,
+    STARTING_FUEL = 100,
+    MAX_FUEL = 100,
+    FUEL_BURN_PER_SECOND = 25,
     SEGMENTS = 8,
     acceleration = { x = 0, y = 0 },
-    drag = { x = THRUST/10, y = THRUST/10 },
     radius = 10,
     exhaust_period = 0.1,
     exhaust_elapsed = 0,
     is_thrusting = false,
-    fuel = STARTING_FUEL,
     speed = 0,
+
+    onNew = function(self)
+        self.state = self.STATE_ALIVE
+
+        self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
+        self.thrust_snd:setLooping(true)
+        -- self.thrust_snd2 = love.audio.newSource("snd/thrust2.ogg", "static")
+        -- self.thrust_snd2:setVolume(0.2)
+        self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
+
+        self.x = arena.width/2
+        self.y = arena.height/2
+        self.width = self.radius
+        self.height = self.radius
+        self.maxVelocity.x = 100
+        self.maxVelocity.y = 100
+        self.minVelocity.x = -100
+        self.minVelocity.y = -100
+        self.drag = { x = self.THRUST/10, y = self.THRUST/10 }
+        self.fuel = self.STARTING_FUEL
+
+        self.explosion_emitter = Emitter:new{
+            x = self.x,
+            y = self.y,
+            width = 1,
+            height = 1,
+
+            min = { velocity = { x = -200, y = -200 }},
+            max = { velocity = { x = 200, y = 200 }},
+        }
+
+        self.explosion_emitter:loadParticles(Fill:extend{
+            width = 2,
+            height = 2,
+            fill = {255, 255, 255},
+            onEmit = function (self)
+                the.view.tween:start(self, 'alpha', 0, math.random() * 0.5)
+                :andThen(function() self:die() end)
+            end
+        },
+        25)
+    end,
 
     onDraw = function(self, x, y)
         love.graphics.push()
 
-        love.graphics.setColor(255, 255, 255, 255)
-        love.graphics.setLineWidth(1)
-        love.graphics.circle("line", x, y, self.radius, self.SEGMENTS)
+        if self.state == self.STATE_ALIVE then
+            love.graphics.setColor(255, 255, 255, 255)
+            love.graphics.setLineWidth(1)
+            love.graphics.circle("line", x, y, self.radius, self.SEGMENTS)
 
-        -- Draw fuel guage
-        if self.fuel > 0 then
-            a1 = -math.pi/2
-            a2 = -math.pi/2 + 2 * math.pi * self.fuel / MAX_FUEL
-            if self.fuel > MAX_FUEL * 0.5 then
-                love.graphics.setColor(0, 255, 0, 200)
-            elseif self.fuel > MAX_FUEL * 0.25 then
-                love.graphics.setColor(255, 255, 0, 200)
-            elseif self.fuel > MAX_FUEL * 0 then
+            -- Draw fuel guage
+            if self.fuel > 0 then
+                a1 = -math.pi/2
+                a2 = -math.pi/2 + 2 * math.pi * self.fuel / self.MAX_FUEL
+                if self.fuel > self.MAX_FUEL * 0.5 then
+                    love.graphics.setColor(0, 255, 0, 200)
+                elseif self.fuel > self.MAX_FUEL * 0.25 then
+                    love.graphics.setColor(255, 255, 0, 200)
+                elseif self.fuel > self.MAX_FUEL * 0 then
+                    love.graphics.setColor(255, 0, 0, 200)
+                end
+                love.graphics.arc("fill", x, y, self.radius-3, a1, a2, self.SEGMENTS)
+            else
+                -- love.graphics.setColor(255, 0, 0, 200)
+                -- love.graphics.print("E", self.x-4, self.y-7)
                 love.graphics.setColor(255, 0, 0, 200)
+                love.graphics.arc("line", x, y, self.radius/3, 0, math.pi * 2, self.SEGMENTS)
             end
-            love.graphics.arc("fill", x, y, self.radius-3, a1, a2, self.SEGMENTS)
-        else
-            -- love.graphics.setColor(255, 0, 0, 200)
-            -- love.graphics.print("E", self.x-4, self.y-7)
-            love.graphics.setColor(255, 0, 0, 200)
-            love.graphics.arc("line", x, y, self.radius/3, 0, math.pi * 2, self.SEGMENTS)
+        end
+
+        if self.state == self.STATE_DEAD then
         end
 
         love.graphics.pop()
     end,
 
+    explode = function(self)
+        self.state = self.STATE_DEAD
+
+        the.app:add(self.explosion_emitter)
+        self.explosion_emitter.x = self.x
+        self.explosion_emitter.y = self.y
+        self.explosion_emitter:explode()
+    end,
+
     thrust = function(self, x, y)
+        if self.state == self.STATE_DEAD then return end
+
         if self.fuel <= 0 then
             return
         end
@@ -94,7 +151,9 @@ player = Sprite:new{
     end,
 
     addFuel = function(self, fuel)
-        if fuel > 0 and self.fuel >= MAX_FUEL then
+        if self.state == self.STATE_DEAD then return end
+
+        if fuel > 0 and self.fuel >= self.MAX_FUEL then
             the.app.surplus_fuel = the.app.surplus_fuel + fuel
         else
             self.fuel = self.fuel + fuel
@@ -103,23 +162,6 @@ player = Sprite:new{
             self.fuel = 0
             love.audio.play(self.out_of_fuel_snd)
         end
-    end,
-
-    onNew = function(self)
-        self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
-        self.thrust_snd:setLooping(true)
-        -- self.thrust_snd2 = love.audio.newSource("snd/thrust2.ogg", "static")
-        -- self.thrust_snd2:setVolume(0.2)
-        self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
-
-        self.x = arena.width/2
-        self.y = arena.height/2
-        self.width = self.radius
-        self.height = self.radius
-        self.maxVelocity.x = 100
-        self.maxVelocity.y = 100
-        self.minVelocity.x = -100
-        self.minVelocity.y = -100
     end,
 
     onUpdate = function(self, dt)
@@ -141,7 +183,7 @@ player = Sprite:new{
         end
 
         if self.is_thrusting then
-            self:addFuel(-FUEL_BURN_PER_SECOND * dt)
+            self:addFuel(-self.FUEL_BURN_PER_SECOND * dt)
 
             if self.exhaust_elapsed > self.exhaust_period then
                 the.view.factory:create(Exhaust)
@@ -180,8 +222,8 @@ Exhaust = Sprite:extend{
         local a = math.max(math.abs(player.acceleration.x), math.abs(player.acceleration.y))
         self.x = player.x - player.radius * player.acceleration.x/a
         self.y = player.y - player.radius * player.acceleration.y/a
-        self.velocity.x = -player.acceleration.x*1.5 + player.velocity.x + math.random(-THRUST/10,THRUST/10)
-        self.velocity.y = -player.acceleration.y*1.5 + player.velocity.y + math.random(-THRUST/10,THRUST/10)
+        self.velocity.x = -player.acceleration.x*1.5 + player.velocity.x + math.random(-player.THRUST/10,player.THRUST/10)
+        self.velocity.y = -player.acceleration.y*1.5 + player.velocity.y + math.random(-player.THRUST/10,player.THRUST/10)
         self.starting_alpha = math.random(255,255)
         self.radius = 1
     end,

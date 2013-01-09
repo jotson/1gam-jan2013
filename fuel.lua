@@ -50,7 +50,7 @@ Fuel = Sprite:extend{
         if self.state == self.STATE_EVAPORATING then
             love.graphics.setColor(255, 255, 255, 255 * math.random())
             love.graphics.line(x, y, player.x + the.view.translate.x, player.y + the.view.translate.y)
-            love.graphics.setColor(255, 0, 0, 255 * self.alpha)
+            love.graphics.setColor(100, 200, 255, 255 * self.alpha)
         else
             love.graphics.setColor(255, 255, 255, 255 * self.alpha)
         end
@@ -84,15 +84,17 @@ Fuel = Sprite:extend{
         self.state = self.STATE_FLOATING
 
         if self:collide(player) then
-            self.state = self.STATE_EVAPORATING
+            if player.state == player.STATE_ALIVE then
+                self.state = self.STATE_EVAPORATING
 
-            player:addFuel(self.FUEL_DRAIN_PER_SECOND * dt)
-            self.fuel = self.fuel - self.FUEL_DRAIN_PER_SECOND * dt
-            self.radius = self.fuel * self.FUEL_SIZE_RATIO
+                player:addFuel(self.FUEL_DRAIN_PER_SECOND * dt)
+                self.fuel = self.fuel - self.FUEL_DRAIN_PER_SECOND * dt
+                self.radius = self.fuel * self.FUEL_SIZE_RATIO
 
-            if self.fuel <= 0 then
-                fuel:destroy(self)
-                fuel:create(1)
+                if self.fuel <= 0 then
+                    fuel:destroy(self)
+                    fuel:create(1)
+                end
             end
         end
 

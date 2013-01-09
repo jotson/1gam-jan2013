@@ -28,6 +28,7 @@ require 'arena'
 require 'player'
 require 'fuel'
 require 'hud'
+require 'enemy'
 
 the.app = App:new{
     name = "#onegameamonth jan/2013",
@@ -41,20 +42,23 @@ the.app = App:new{
         fuel:create(20)
         -- self.view.focus = player
         -- self.view:clampTo(arena)
+        Enemy:new()
+        Enemy:new()
+        Enemy:new()
     end,
 
     onUpdate = function(self)
         if the.keys:pressed('w') then
-            player:thrust(nil, -THRUST)
+            player:thrust(nil, -player.THRUST)
         end
         if the.keys:pressed('s') then
-            player:thrust(nil, THRUST)
+            player:thrust(nil, player.THRUST)
         end
         if the.keys:pressed('a') then
-            player:thrust(-THRUST, nil)
+            player:thrust(-player.THRUST, nil)
         end
         if the.keys:pressed('d') then
-            player:thrust(THRUST, nil)
+            player:thrust(player.THRUST, nil)
         end
     end,
 
