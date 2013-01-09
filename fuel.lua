@@ -31,11 +31,11 @@ Fuel = Sprite:extend{
     onNew = function(self)
         self.x = math.random(0, arena.width)
         self.y = math.random(0, arena.height)
-        self.velocity = { x = math.random(-25,25) , y = math.random(-25,25), rotation = math.random(-math.pi, math.pi) }
         self.fuel = math.random(5,30)
         self.radius = self.fuel * self.FUEL_SIZE_RATIO
         self.width = self.radius
         self.height = self.radius
+        self.velocity = { x = math.random(-25,25), y = math.random(-25,25), rotation = math.random(-math.pi, math.pi) * 8/self.radius }
 
         the.view.tween:start(self, 'alpha', 1, 0.75)
 
