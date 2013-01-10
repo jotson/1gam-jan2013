@@ -30,6 +30,9 @@ Fuel = Sprite:extend{
     alpha = 0,
 
     onNew = function(self)
+        -- Stream to keep memory usage low
+        -- This is in Fuel, like the rest of the tractor beam code, to
+        -- make it easier to have multiple tractor sounds going at once.
         self.tractor_snd = love.audio.newSource("snd/tractor_beam.ogg", "stream")
         self.tractor_snd:setVolume(0.25)
 

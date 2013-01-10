@@ -66,6 +66,9 @@ the.app = App:new{
         if the.keys:pressed('d') then
             player:thrust(player.THRUST, nil)
         end
+        if the.keys:pressed('0') then
+            player:selfDestruct()
+        end
     end,
 
     onDraw = function(self)

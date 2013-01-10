@@ -33,6 +33,7 @@ player = Sprite:new{
     exhaust_elapsed = 0,
     is_thrusting = false,
     speed = 0,
+    self_destruct = 0,
 
     onNew = function(self)
         self.state = self.STATE_ALIVE
@@ -43,6 +44,7 @@ player = Sprite:new{
         self.explosion_snd = love.audio.newSource("snd/explosion.ogg", "static")
         self.bounce_snd = love.audio.newSource("snd/bounce.ogg", "static")
         self.surplus_snd = love.audio.newSource("snd/beep.ogg", "static")
+        self.self_destruct_snd = love.audio.newSource("snd/self_destruct.ogg", "static")
 
         self.x = arena.width/2
         self.y = arena.height/2
@@ -55,6 +57,7 @@ player = Sprite:new{
         self.drag = { x = self.THRUST/10, y = self.THRUST/10 }
         self.fuel = self.STARTING_FUEL
 
+        -- Setup explosion emitter
         self.explosion_emitter = Emitter:new{
             x = self.x,
             y = self.y,
@@ -70,11 +73,19 @@ player = Sprite:new{
             height = 2,
             fill = {255, 255, 255},
             onEmit = function (self)
-                the.view.tween:start(self, 'alpha', 0, math.random() * 0.5)
-                :andThen(function() self:die() end)
+                self.width = math.random(2,6)
+                self.height = 2
+                local t = math.random() * 2
+                -- It's subtle (maybe too subtle) but some of the ship pieces are
+                -- different sizes and rotating
+                the.view.tween
+                    :start(self, 'alpha', 0, t)
+                    :andThen(function() self:die() end)
+                the.view.tween
+                    :start(self, 'rotation', math.random(-4, 4)*math.pi, t)
             end
         },
-        25)
+        50)
     end,
 
     onDraw = function(self, x, y)
@@ -107,6 +118,13 @@ player = Sprite:new{
                 love.graphics.setColor(255, 0, 0, 200)
                 love.graphics.arc("line", x, y, self.radius/3, 0, math.pi * 2, self.SEGMENTS)
             end
+
+            -- Self destruct
+            if self.self_destruct > 0 then
+                love.graphics.setColor(255, 0, 0, math.abs(math.sin(love.timer.getMicroTime()*14)*255))
+                love.graphics.setFont(the.app.small_font)
+                love.graphics.print(math.ceil(self.self_destruct*100)/100, self.x + self.radius + 5, self.y - 10)
+            end
         end
 
         if self.state == self.STATE_DEAD then
@@ -116,14 +134,30 @@ player = Sprite:new{
     end,
 
     explode = function(self)
-        self.state = self.STATE_DEAD
+        if self.state == self.STATE_DEAD then
+            return false
+        end
 
         the.app:add(self.explosion_emitter)
+
         self.explosion_emitter.x = self.x
         self.explosion_emitter.y = self.y
         self.explosion_emitter:explode()
 
         love.audio.play(self.explosion_snd)
+        if not self.self_destruct_snd:isStopped() then
+            self.self_destruct_snd:stop()
+        end
+
+        self.state = self.STATE_DEAD
+    end,
+
+    selfDestruct = function(self)
+        if self.self_destruct == 0 then
+            self.self_destruct_snd:setLooping(true)
+            love.audio.play(self.self_destruct_snd)
+            self.self_destruct = 3
+        end
     end,
 
     thrust = function(self, x, y)
@@ -211,6 +245,14 @@ player = Sprite:new{
         else
             if not self.thrust_snd:isStopped() then
                 self.thrust_snd:stop()
+            end
+        end
+
+        if self.self_destruct > 0 then
+            self.self_destruct = self.self_destruct - dt
+            if self.self_destruct <= 0 then
+                self.self_destruct = 0
+                self:explode()
             end
         end
 
