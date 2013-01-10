@@ -5,6 +5,15 @@
 - Run it with LÖVE. Example:
         $ love january
 
+# How to play
+
+- Use `W`, `A`, `S`, and `D` to move
+- Collect fuel pods by approaching them
+- Avoid enemies
+- Watch your fuel gauge -- don't run out
+- Extra fuel is added to your score -- collect enough to advance
+- Press `0` to self destruct
+
 # Dev journal
 
 ## January 2, 2013
@@ -87,4 +96,6 @@ Added camera shake when the player hits a wall.
 
 Hours: 12
 
+## January 10, 2013
 
+Added self destruct button, animation, and sound effect. For those moments when you run out of fuel and you're bored of waiting for a fuel pod to float within range.
