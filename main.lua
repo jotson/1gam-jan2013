@@ -37,6 +37,9 @@ the.app = App:new{
     shake = 0,
 
     onRun = function(self)
+        self.small_font = love.graphics.newFont("fnt/8thcargo.ttf", 16)
+        self.big_font = love.graphics.newFont("fnt/8thcargo.ttf", 32)
+
         self:add(arena)
         self:add(player)
         fuel:create(20)

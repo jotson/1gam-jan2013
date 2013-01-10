@@ -107,7 +107,9 @@ Fuel = Sprite:extend{
                 self.radius = self.fuel * self.FUEL_SIZE_RATIO
 
                 if self.fuel <= 0 then
-                    self.tractor_snd:stop()
+                    if not self.tractor_snd:isStopped() then
+                        self.tractor_snd:stop()
+                    end
                     fuel:destroy(self)
                     fuel:create(1)
                 end

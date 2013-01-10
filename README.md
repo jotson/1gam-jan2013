@@ -72,3 +72,9 @@ Added "gravity" to the tractor beam so that there is a slight pull towards the f
 Used http://www.bfxr.net/ to make some sound effects.
 
 Added more sound effects and a few additional visual effects.
+
+Enemy scanning sound effects adapted from the Conet Project (number stations).
+
+Inspired by the number station audio I added for the enemy ships, I added some more graphics stuff when the enemy has detected the player. I think she's saying, "eins eins fünf".
+
+Added a custom font from http://www.dafont.com/8th-cargo.font

@@ -33,6 +33,9 @@ Enemy = Sprite:extend{
     alpha = 0,
 
     onNew = function(self)
+        self.scan_snd = love.audio.newSource("snd/scanning.ogg", "static")
+        self.detected_snd = love.audio.newSource("snd/detected.ogg", "static")
+
         self.x = math.random(50, arena.width-50)
         if self.x > player.x - self.DETECTION_DISTANCE and self.x < player.x + self.DETECTION_DISTANCE then
             self.y = math.random(50, player.y - self.DETECTION_DISTANCE)
@@ -58,21 +61,45 @@ Enemy = Sprite:extend{
         -- Detection radius
         if self.state == self.STATE_IDLE then
         else
+            -- The 115 animation
             love.graphics.setColor(255, 0, 0, math.random(0, 200))
             love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE, 20)
+            love.graphics.setFont(the.app.small_font)
+            local visualizer = math.sin(love.timer.getTime())
+            local characters = { "1", "1", "5", }
+            if visualizer >= 0 then
+                for i = 1,10 do
+                    for j = 1,3 do
+                        local a = math.random() * math.pi*2;
+                        local c = characters[math.random(1,#characters)]
+                        local r = 30 + 10 * j
+                        local x1 = math.cos(a) * r
+                        local y1 = math.sin(a) * r
+                        love.graphics.print(c, x1, y1, a)
+                    end
+                end
+            end
+            if visualizer < 0 then
+                for i = 1,10 do
+                    for j = 1,#characters do
+                        local a = math.pi*2/10 * i;
+                        local c = characters[j]
+                        local r = 30 + 10 * j
+                        local x1 = math.cos(a) * r
+                        local y1 = math.sin(a) * r
+                        love.graphics.print(c, x1, y1, a)
+                    end
+                end
+            end
         end
+
+        -- Scanner circles animation
         love.graphics.setColor(255, 0, 0, self.alpha * 50)
         love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE * math.sin(love.timer.getMicroTime()*3+self.offset), 20)
         love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE * math.sin(love.timer.getMicroTime()*18+self.offset), 20)
         love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE * math.sin(love.timer.getMicroTime()*32+self.offset), 20)
-        -- i = 0
-        -- while i < math.pi * 2 do
-        --     love.graphics.setColor(255, 0, 0, 25 * math.random())
-        --     love.graphics.arc("fill", 0, 0, self.DETECTION_DISTANCE+1, i, i + math.pi/3, 20)
-        --     i = i + math.pi/1.5
-        -- end
 
-        -- Ship
+        -- The ship
         love.graphics.setColor(255, 0, 0, self.alpha * 255)
         love.graphics.circle("line", 0, 0, self.radius, 3)
 
@@ -89,6 +116,10 @@ Enemy = Sprite:extend{
         local distance = self:distanceTo(player)
 
         if player.state == player.STATE_ALIVE and distance <= self.DETECTION_DISTANCE then
+            if self.detected_snd:isStopped() then
+                love.audio.play(self.detected_snd)
+            end
+
             self.state = self.STATE_HOMING
 
             -- Calculate vector to player and GO
@@ -103,6 +134,16 @@ Enemy = Sprite:extend{
             self.acceleration.y = dy/n * self.THRUST * self.DETECTION_DISTANCE/distance
         else
             self.state = self.STATE_IDLE
+
+            if not self.detected_snd:isStopped() then
+                self.detected_snd:stop()
+            end
+
+            if math.random(0,6000) <= 1 then
+                if self.scan_snd:isStopped() then
+                    love.audio.play(self.scan_snd)
+                end
+            end
 
             if self.elapsed > self.THRUST_INTERVAL then
                 self.acceleration.x = math.random(-self.THRUST/5, self.THRUST/5)

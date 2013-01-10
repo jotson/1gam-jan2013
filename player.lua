@@ -44,6 +44,7 @@ player = Sprite:new{
         self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
         self.explosion_snd = love.audio.newSource("snd/explosion.ogg", "static")
         self.bounce_snd = love.audio.newSource("snd/bounce.ogg", "static")
+        self.surplus_snd = love.audio.newSource("snd/beep.ogg", "static")
 
         self.x = arena.width/2
         self.y = arena.height/2
@@ -159,12 +160,17 @@ player = Sprite:new{
 
         if fuel > 0 and self.fuel >= self.MAX_FUEL then
             the.app.surplus_fuel = the.app.surplus_fuel + fuel
+            if self.surplus_snd:isStopped() then
+                love.audio.play(self.surplus_snd)
+            end
         else
             self.fuel = self.fuel + fuel
         end
         if self.fuel <= 0 then
             self.fuel = 0
-            love.audio.play(self.out_of_fuel_snd)
+            if self.out_of_fuel_snd:isStopped() then
+                love.audio.play(self.out_of_fuel_snd)
+            end
         end
     end,
 
@@ -206,7 +212,9 @@ player = Sprite:new{
                 self.exhaust_elapsed = 0
             end
         else
-            self.thrust_snd:stop()
+            if not self.thrust_snd:isStopped() then
+                self.thrust_snd:stop()
+            end
             -- self.thrust_snd2:stop()
         end
 
