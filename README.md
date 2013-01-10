@@ -85,4 +85,6 @@ Adding beeping sound when the enemy is homing in on the player. The frequency of
 
 Added camera shake when the player hits a wall.
 
-Hours: 8
+Hours: 12
+
+

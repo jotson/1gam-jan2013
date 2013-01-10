@@ -40,6 +40,8 @@ function drawHUD()
         i = #score.graph - n
         if score.graph[i] then
             love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, score.graph[i]/max * MAX_HEIGHT + 1)
+        else
+            love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, 1)
         end
     end
 

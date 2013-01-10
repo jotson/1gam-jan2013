@@ -73,7 +73,13 @@ the.app = App:new{
 
         -- Simple camera shake
         if self.shake ~= 0 then
-            the.view:panTo({ love.graphics.getWidth()/2 + math.random(-self.shake, self.shake), love.graphics.getHeight()/2 + math.random(-self.shake, self.shake)}, 0)
+            if the.view.focus then
+                the.view.focusOffset = { x = math.random(-self.shake, self.shake), y = math.random(-self.shake, self.shake)}
+            else
+                the.view:panTo({ love.graphics.getWidth()/2 + math.random(-self.shake, self.shake), love.graphics.getHeight()/2 + math.random(-self.shake, self.shake)}, 0)
+            end
+        else
+            the.view.focusOffset = { x = 0, y = 0 }
         end
         self.shake = 0
     end
