@@ -65,11 +65,13 @@ Added some camera shake when thrusting hard off the currrent vector of movement.
 
 Added enemies that scan for the player and home in if the player is within a certain radius. Spent some time (probably, too much time) creating a visualization for the enemy scanning radius so the player knows what areas he should avoid.
 
+Hours: 3
+
 ## January 9, 2013
 
 Added "gravity" to the tractor beam so that there is a slight pull towards the fuel pods as they are being absorbed by the player. I'm aiming for a somewhat subtle effect. It can be used by players to line up their runs to collect as much fuel as possible without thrusters. The extra pull encourages players to develop a flow, slingshotting themselves from one fuel pod to the next.
 
-Used http://www.bfxr.net/ to make some sound effects.
+Used Audacity and http://www.bfxr.net/ to make sound effects.
 
 Added more sound effects and a few additional visual effects.
 
@@ -78,3 +80,7 @@ Enemy scanning sound effects adapted from the Conet Project (number stations).
 Inspired by the number station audio I added for the enemy ships, I added some more graphics stuff when the enemy has detected the player. I think she's saying, "eins eins fünf".
 
 Added a custom font from http://www.dafont.com/8th-cargo.font
+
+Adding beeping sound when the enemy is homing in on the player. The frequency of the beeps increases as the enemy closes in.
+
+Hours: 8

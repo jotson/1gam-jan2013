@@ -26,7 +26,8 @@ Enemy = Sprite:extend{
     THRUST = 30,
     DETECTION_DISTANCE = arena.width/8,
     THRUST_INTERVAL = 2, -- seconds
-    elapsed = 0,
+    thrust_elapsed = 0,
+    homing_elapsed = 0,
     radius = 5,
     width = 5,
     height = 5,
@@ -35,6 +36,7 @@ Enemy = Sprite:extend{
     onNew = function(self)
         self.scan_snd = love.audio.newSource("snd/scanning.ogg", "static")
         self.detected_snd = love.audio.newSource("snd/detected.ogg", "static")
+        self.homing_snd = love.audio.newSource("snd/homing.ogg", "static")
 
         self.x = math.random(50, arena.width-50)
         if self.x > player.x - self.DETECTION_DISTANCE and self.x < player.x + self.DETECTION_DISTANCE then
@@ -111,13 +113,24 @@ Enemy = Sprite:extend{
             self:collide(player)
         end
 
-        self.elapsed = self.elapsed + dt
+        self.thrust_elapsed = self.thrust_elapsed + dt
+        self.homing_elapsed = self.homing_elapsed + dt
 
         local distance = self:distanceTo(player)
 
         if player.state == player.STATE_ALIVE and distance <= self.DETECTION_DISTANCE then
+            -- eins eins fünf
             if self.detected_snd:isStopped() then
                 love.audio.play(self.detected_snd)
+            end
+
+            -- homing sound
+            if self.homing_elapsed > distance / self.DETECTION_DISTANCE - 0.1 then
+                if not self.homing_snd:isStopped() then
+                    self.homing_snd:stop()
+                end
+                love.audio.play(self.homing_snd)
+                self.homing_elapsed = 0
             end
 
             self.state = self.STATE_HOMING
@@ -145,10 +158,10 @@ Enemy = Sprite:extend{
                 end
             end
 
-            if self.elapsed > self.THRUST_INTERVAL then
+            if self.thrust_elapsed > self.THRUST_INTERVAL then
                 self.acceleration.x = math.random(-self.THRUST/5, self.THRUST/5)
                 self.acceleration.y = math.random(-self.THRUST/5, self.THRUST/5)
-                self.elapsed = 0
+                self.thrust_elapsed = 0
             end
         end
 
