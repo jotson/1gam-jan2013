@@ -23,11 +23,13 @@ arena = Fill:extend{
     width = love.graphics.getWidth(),
     height = love.graphics.getHeight() - 100,
     fill = { 0, 0, 0, 0 },
-    border = { 255, 255, 255, 50 },
+    border = { 255, 255, 255, 10 },
 
-    highlightWall = function(self, x, y)
-        the.app.shake = 1
-        the.view.tween:start(the.app, 'shake', 0, 0.25)
+    highlightWall = function(self, object, x, y)
+        if object == player then
+            the.app.shake = 1
+            the.view.tween:start(the.app, 'shake', 0, 0.25)
+        end
 
         local o = the.view.factory:create(arenaBounceHighlight)
         if x == 0 then
@@ -51,11 +53,13 @@ arena = Fill:extend{
             o.width = o.MAX_SIZE
             o.height = 1
         end
+        o:shrink()
     end,
 }
 
 arenaBounceHighlight = Fill:extend{
-    MAX_SIZE = 60,
+    MAX_SIZE = 50,
+    TIMER = 0.25,
     width = 1,
     height = 1,
     fill = { 100, 200, 255, 255 },
@@ -69,7 +73,20 @@ arenaBounceHighlight = Fill:extend{
         self.alpha = 1
 
         the.view.tween
-            :start(self, 'alpha', 0, 1)
+            :start(self, 'alpha', 0, self.TIMER)
             :andThen(function() the.view.factory:recycle(self) end)
+    end,
+
+    shrink = function(self)
+        self.center = {}
+        self.center.x = self.x + self.width/2
+        self.center.y = self.y + self.height/2
+        if self.height > self.width then
+            the.view.tween:start(self, 'height', 1, self.TIMER)
+            the.view.tween:start(self, 'y', self.center.y, self.TIMER)
+        else
+            the.view.tween:start(self, 'width', 1, self.TIMER)
+            the.view.tween:start(self, 'x', self.center.x, self.TIMER)
+        end
     end
 }

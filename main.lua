@@ -29,16 +29,19 @@ require 'player'
 require 'fuel'
 require 'hud'
 require 'enemy'
+require 'score'
 
 the.app = App:new{
     name = "#onegameamonth jan/2013",
-    fuel = {},
-    surplus_fuel = 0,
     shake = 0,
 
     onRun = function(self)
-        self.small_font = love.graphics.newFont("fnt/8thcargo.ttf", 16)
-        self.big_font = love.graphics.newFont("fnt/8thcargo.ttf", 32)
+        score:startGame()
+        the.view.timer:every(1, function() score:update() end)
+
+        self.small_font = love.graphics.newFont("fnt/jupiter.ttf", 16)
+        self.big_font = love.graphics.newFont("fnt/jupiter.ttf", 24)
+        self.enemy_font = love.graphics.newFont("fnt/8thcargo.ttf", 16) -- No symbols
 
         self:add(arena)
         self:add(player)

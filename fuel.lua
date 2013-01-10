@@ -123,18 +123,22 @@ Fuel = Sprite:extend{
         if self.x < self.radius then
             self.x = self.radius
             self.velocity.x = -self.velocity.x
+            arena:highlightWall(self, 0, self.y)
         end
         if self.x > arena.width - self.radius then
             self.x = arena.width - self.radius
             self.velocity.x = -self.velocity.x
+            arena:highlightWall(self, arena.width, self.y)
         end
         if self.y < self.radius then
             self.y = self.radius
             self.velocity.y = -self.velocity.y
+            arena:highlightWall(self, self.x, 0)
         end
         if self.y > arena.height - self.radius then
             self.y = arena.height - self.radius
             self.velocity.y = -self.velocity.y
+            arena:highlightWall(self, self.x, arena.height)
         end
     end,
 }

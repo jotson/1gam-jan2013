@@ -66,7 +66,7 @@ Enemy = Sprite:extend{
             -- The 115 animation
             love.graphics.setColor(255, 0, 0, math.random(0, 200))
             love.graphics.circle("line", 0, 0, self.DETECTION_DISTANCE, 20)
-            love.graphics.setFont(the.app.small_font)
+            love.graphics.setFont(the.app.enemy_font)
             local visualizer = math.sin(love.timer.getTime())
             local characters = { "1", "1", "5", }
             if visualizer >= 0 then

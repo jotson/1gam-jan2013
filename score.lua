@@ -19,38 +19,52 @@
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 
-function drawHUD()
-    love.graphics.push()
+score = {
+    level_total = 0,
+    game_total = 0,
+    graph = {},
 
-    love.graphics.setFont(the.app.big_font)
-    love.graphics.setColor(100, 200, 255, math.random(100,150))
+    startGame = function(self)
+        self.game_total = 0
+        self:startLevel()
+    end,
 
-    -- Draw score graph
-    local BARS = 60
-    local MAX_HEIGHT = 80
-    local max = 0
-    for i = #score.graph-BARS, #score.graph do
-        if score.graph[i] then
-            max = math.max(score.graph[i], max)
+    startLevel = function(self)
+        self.level_total = 0
+        self.graph = {}
+        self.start_time = os.time()
+    end,
+
+    add = function(self, fuel)
+        local index = os.time() - self.start_time + 1
+
+        self.level_total = self.level_total + fuel
+        self.game_total = self.game_total + fuel
+
+        while true do
+            if self.graph[index] then
+                self.graph[index] = self.graph[index] + fuel
+                break
+            else
+                table.insert(self.graph, 0)
+            end
         end
+    end,
+
+    getFuelPerMinute = function(self)
+        local min = (os.time() - self.start_time) / 60
+        local fpm = self.level_total / min
+        if min == 0 then fpm = 0 end
+        -- fpm = math.ceil(fpm*100)/100
+        fpm = math.floor(fpm)
+        return fpm
+    end,
+
+    getTotalFuel = function(self)
+        return math.floor(self.game_total) or 0
+    end,
+
+    update = function(self)
+        self:add(0)
     end
-    if max == 0 then max = 1 end
-    local w = 4
-    for n = 0, BARS-1 do
-        i = #score.graph - n
-        if score.graph[i] then
-            love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, score.graph[i]/max * MAX_HEIGHT + 1)
-        end
-    end
-
-    -- Fuel/minute gauge
-    local x1 = 320
-    local x2 = 430
-    love.graphics.print("FUEL/MIN", x1, arena.height)
-    love.graphics.print(score:getFuelPerMinute(), x2, arena.height)
-
-    love.graphics.print("TOTAL", x1, arena.height+20)
-    love.graphics.print(score:getTotalFuel(), x2, arena.height+20)
-
-    love.graphics.pop()
-end
+}

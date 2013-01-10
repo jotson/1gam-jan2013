@@ -81,11 +81,15 @@ player = Sprite:new{
         love.graphics.push()
 
         if self.state == self.STATE_ALIVE then
-            love.graphics.setColor(255, 255, 255, 255)
+            if self.fuel > 0 then
+                love.graphics.setColor(255, 255, 255, 255)
+            else
+                love.graphics.setColor(255, 255, 255, math.abs(math.sin(love.timer.getMicroTime()*8))*255)
+            end
             love.graphics.setLineWidth(1)
             love.graphics.circle("line", x, y, self.radius, self.SEGMENTS)
 
-            -- Draw fuel guage
+            -- Draw fuel gauge
             if self.fuel > 0 then
                 a1 = -math.pi/2
                 a2 = -math.pi/2 + 2 * math.pi * self.fuel / self.MAX_FUEL
@@ -152,7 +156,7 @@ player = Sprite:new{
         if self.state == self.STATE_DEAD then return end
 
         if fuel > 0 and self.fuel >= self.MAX_FUEL then
-            the.app.surplus_fuel = the.app.surplus_fuel + fuel
+            score:add(fuel)
             if self.surplus_snd:isStopped() then
                 love.audio.play(self.surplus_snd)
             end
@@ -173,28 +177,28 @@ player = Sprite:new{
             self.velocity.x = -self.velocity.x
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
-            arena:highlightWall(0, self.y)
+            arena:highlightWall(self, 0, self.y)
         end
         if self.x > arena.width - self.radius then
             self.x = arena.width - self.radius
             self.velocity.x = -self.velocity.x
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
-            arena:highlightWall(arena.width, self.y)
+            arena:highlightWall(self, arena.width, self.y)
         end
         if self.y < self.radius then
             self.y = self.radius
             self.velocity.y = -self.velocity.y
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
-            arena:highlightWall(self.x, 0)
+            arena:highlightWall(self, self.x, 0)
         end
         if self.y > arena.height - self.radius then
             self.y = arena.height - self.radius
             self.velocity.y = -self.velocity.y
             self.bounce_snd:stop()
             love.audio.play(self.bounce_snd)
-            arena:highlightWall(self.x, arena.height)
+            arena:highlightWall(self, self.x, arena.height)
         end
 
         if self.is_thrusting then
