@@ -26,6 +26,9 @@ arena = Fill:extend{
     border = { 255, 255, 255, 50 },
 
     highlightWall = function(self, x, y)
+        the.app.shake = 1
+        the.view.tween:start(the.app, 'shake', 0, 0.25)
+
         local o = the.view.factory:create(arenaBounceHighlight)
         if x == 0 then
             o.x = 1
