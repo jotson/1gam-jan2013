@@ -146,6 +146,12 @@ Enemy = Sprite:extend{
             self.acceleration.x = dx/n * self.THRUST * self.DETECTION_DISTANCE/distance
             self.acceleration.y = dy/n * self.THRUST * self.DETECTION_DISTANCE/distance
         else
+            if self.state == self.STATE_HOMING then
+                if self.scan_snd:isStopped() then
+                    love.audio.play(self.scan_snd)
+                end
+            end
+
             self.state = self.STATE_IDLE
 
             if not self.detected_snd:isStopped() then

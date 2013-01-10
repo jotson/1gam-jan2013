@@ -39,8 +39,6 @@ player = Sprite:new{
 
         self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
         self.thrust_snd:setLooping(true)
-        -- self.thrust_snd2 = love.audio.newSource("snd/thrust2.ogg", "static")
-        -- self.thrust_snd2:setVolume(0.2)
         self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
         self.explosion_snd = love.audio.newSource("snd/explosion.ogg", "static")
         self.bounce_snd = love.audio.newSource("snd/bounce.ogg", "static")
@@ -146,11 +144,6 @@ player = Sprite:new{
         if (self.acceleration.y ~= 0 and self.acceleration.y/math.abs(self.acceleration.y) ~= self.velocity.y/math.abs(self.velocity.y)) then
             the.app.shake = self.speed * 0.01
         end
-        if the.app.shake ~= 0 then
-            -- if self.thrust_snd2:isStopped() then
-            --     love.audio.play(self.thrust_snd2)
-            -- end
-        end
 
         self.is_thrusting = true
     end,
@@ -215,7 +208,6 @@ player = Sprite:new{
             if not self.thrust_snd:isStopped() then
                 self.thrust_snd:stop()
             end
-            -- self.thrust_snd2:stop()
         end
 
         -- Calculate speed (velocity magnitude)

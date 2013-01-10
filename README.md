@@ -83,4 +83,6 @@ Added a custom font from http://www.dafont.com/8th-cargo.font
 
 Adding beeping sound when the enemy is homing in on the player. The frequency of the beeps increases as the enemy closes in.
 
+Added camera shake when the player hits a wall.
+
 Hours: 8
