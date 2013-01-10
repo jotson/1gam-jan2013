@@ -69,10 +69,18 @@ Enemy = Sprite:extend{
             love.graphics.setFont(the.app.enemy_font)
             local visualizer = math.sin(love.timer.getTime())
             local characters = { "1", "1", "5", }
+            -- Static
+            love.graphics.setColor(255, 0, 0, math.random(50,100))
+            for i = 1,1000 do
+                local a = math.random() * math.pi*2
+                local x1 = math.cos(a) * math.random(80,self.DETECTION_DISTANCE)
+                local y1 = math.sin(a) * math.random(80,self.DETECTION_DISTANCE)
+                love.graphics.point(x1, y1)
+            end
             if visualizer >= 0 then
                 for i = 1,10 do
                     for j = 1,3 do
-                        local a = math.random() * math.pi*2;
+                        local a = math.random() * math.pi*2
                         local c = characters[math.random(1,#characters)]
                         local r = 30 + 10 * j
                         local x1 = math.cos(a) * r

@@ -54,5 +54,11 @@ function drawHUD()
     love.graphics.print("TOTAL", x1, arena.height+20)
     love.graphics.print(score:getTotalFuel(), x2, arena.height+20)
 
+    -- Static
+    love.graphics.setColor(255, 255, 255, math.random(50,100))
+    for i = 1,2000 do
+        love.graphics.point(math.random(0, arena.width), math.random(arena.height, arena.height+100))
+    end
+
     love.graphics.pop()
 end
