@@ -50,7 +50,8 @@ the.app = App:new{
         self.start_overlay = love.graphics.newImage("img/start.png")
         hud.bg = love.graphics.newImage("img/hud.png")
 
-
+        love.mouse.setVisible(false)
+        
         -- Sprite for showing level information
         self.level_spr = Text:new{
             text = "",
