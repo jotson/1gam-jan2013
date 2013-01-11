@@ -42,12 +42,12 @@ the.app = App:new{
     level = 1,
 
     onRun = function(self)
-        self.state = self.STATE_START
-
         self.small_font = love.graphics.newFont("fnt/jupiter.ttf", 16)
-        self.big_font = love.graphics.newFont("fnt/jupiter.ttf", 24)
-        self.huge_font = love.graphics.newFont("fnt/jupiter.ttf", 36)
+        self.big_font = love.graphics.newFont("fnt/jupiter.ttf", 30)
+        self.huge_font = love.graphics.newFont("fnt/jupiter.ttf", 40)
         self.enemy_font = love.graphics.newFont("fnt/8thcargo.ttf", 16) -- No symbols
+
+        self.start_overlay = love.graphics.newImage("img/start.png")
 
         -- Sprite for showing level information
         self.level_spr = Text:new{
@@ -91,8 +91,34 @@ the.app = App:new{
         fuel:create(20)
         enemies:create(3)
 
+        self.enemy_start = Enemy:new()
+
         score:startGame()
         the.view.timer:every(1, function() score:update() end)
+
+        self:changeState(self.STATE_START)
+    end,
+
+    changeState = function(self, state)
+        if state == self.STATE_START then
+            player.state = player.STATE_DEAD
+            self:add(self.enemy_start)
+
+            self.state = state
+        end
+
+        if state == self.STATE_PLAYING then
+            self:remove(self.enemy_start)
+
+            self.state = state
+        end
+
+        if state == self.STATE_GAMEOVER then
+            player.state = player.STATE_DEAD
+            the.app:remove(player)
+
+            self.state = state
+        end
     end,
 
     onUpdate = function(self)
@@ -110,12 +136,21 @@ the.app = App:new{
     end,
 
     updateStart = function(self)
+        -- Adapt an enemy for use on the start screen
+        self.enemy_start.x = arena.width - 150
+        self.enemy_start.y = arena.height - 100
+        self.enemy_start.state = Enemy.STATE_HOMING
+        self.enemy_start.scale = 8
+        if not self.enemy_start.scan_snd:isStopped() then
+            self.enemy_start.scan_snd:stop()
+        end
+
         if the.keys:justPressed('escape') then
             love.event.push("quit")
         end
 
         if the.keys:justPressed('1', '2', '3', '4', '5', '6', '7', '8', '9') then
-            self.state = self.STATE_PLAYING
+            self:changeState(self.STATE_PLAYING)
             
             score:startGame()
 
@@ -144,15 +179,13 @@ the.app = App:new{
         end
 
         if the.keys:justPressed(' ') then
-            self.state = self.STATE_START
+            self:changeState(self.STATE_START)
         end
     end,
 
     updatePlaying = function(self)
         if the.keys:justPressed('escape') then
-            player.state = player.STATE_DEAD
-            the.app:remove(player)
-            self.state = self.STATE_START
+            self:changeState(self.STATE_START)
         end
         if the.keys:pressed('w') then
             player:thrust(nil, -player.THRUST)
@@ -192,13 +225,22 @@ the.app = App:new{
 
         local blink_factor = math.abs(math.sin(love.timer.getMicroTime()*1.2))
 
-        love.graphics.setColor(0, 0, 0, 160)
-        love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+        -- love.graphics.setColor(0, 0, 0, 160)
+        -- love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+        love.graphics.setColor(255, 255, 255, 255)
+        love.graphics.draw(self.start_overlay, 0, 0)
+
+        love.graphics.setFont(self.big_font)
+        local titles = "One Game A Month\nJanuary 2013\n\nProgramming, art, music, sound, and design by John Watson\nflagrantdisregard.com\n\nSource + dev journal @ \ngithub.com/jotson/OGAM-January2013\n\n(c) 2013 John Watson\nLicensed under the MIT license"
+        love.graphics.setColor(0, 0, 0, 255)
+        love.graphics.printf(titles, 403, 53, 350, "right")
+        love.graphics.setColor(100, 200, 255, 255)
+        love.graphics.printf(titles, 400, 50, 350, "right")
 
         love.graphics.setFont(self.huge_font)
         love.graphics.setColor(255, 255, 255, blink_factor*200+55)
-        love.graphics.printf("PRESS NUMBER KEY TO SELECT LEVEL", 0, arena.height+15, arena.width, "center")
-        love.graphics.printf("[ESC] TO QUIT", 0, arena.height+45, arena.width, "center")
+        love.graphics.printf("PRESS NUMBER KEY TO SELECT LEVEL", 0, arena.height+10, arena.width, "center")
+        love.graphics.printf("[ESC] TO QUIT", 0, arena.height+40, arena.width, "center")
     end,
 
     drawGameover = function(self)
@@ -214,7 +256,7 @@ the.app = App:new{
         love.graphics.printf("GAME OVER", 0, arena.height/2 - 50, arena.width, "center")
         love.graphics.printf("SCORE: " .. score:getTotalFuel(), 0, arena.height/2, arena.width, "center")
         love.graphics.setColor(255, 255, 255, blink_factor*200+55)
-        love.graphics.printf("[SPACE] TO RE-START /// [ESC] TO QUIT", 0, arena.height+25, arena.width, "center")
+        love.graphics.printf("[SPACE] TO RE-START /// [ESC] TO QUIT", 0, arena.height+20, arena.width, "center")
     end,
 
     drawPlaying = function(self)

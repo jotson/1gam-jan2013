@@ -150,9 +150,7 @@ player = Sprite:new{
             self.thrust_snd:stop()
         end
 
-        the.app:remove(self)
-        self.state = self.STATE_DEAD
-        the.app.state = the.app.STATE_GAMEOVER
+        the.app:changeState(the.app.STATE_GAMEOVER)
     end,
 
     selfDestruct = function(self)

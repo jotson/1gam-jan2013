@@ -56,6 +56,7 @@ Enemy = Sprite:extend{
         love.graphics.push()
 
         love.graphics.translate(x, y)
+        love.graphics.scale(self.scale)
         love.graphics.rotate(math.sin(love.timer.getMicroTime())*math.pi+self.offset)
 
         -- Detection radius
