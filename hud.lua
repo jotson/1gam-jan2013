@@ -30,17 +30,17 @@ function drawHUD()
         local BARS = 60
         local MAX_HEIGHT = 80
         local max = 0
-        for i = #score.graph-BARS, #score.graph do
-            if score.graph[i] then
-                max = math.max(score.graph[i], max)
+        for i = #score.level_graph-BARS, #score.level_graph do
+            if score.level_graph[i] then
+                max = math.max(score.level_graph[i], max)
             end
         end
         if max == 0 then max = 1 end
         local w = 4
         for n = 0, BARS-1 do
-            i = #score.graph - n
-            if score.graph[i] then
-                love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, score.graph[i]/max * MAX_HEIGHT + 1)
+            i = #score.level_graph - n
+            if score.level_graph[i] then
+                love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, score.level_graph[i]/max * MAX_HEIGHT + 1)
             else
                 love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, 1)
             end

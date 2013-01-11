@@ -7,8 +7,16 @@
 
 # How to play
 
+You are a humble fuel thief trying to make ends meet in a lonely universe.
+
+Maneuver your ship next to asteroids to mine them for fuel. Your ship has a limited amount of fuel. Watch the fuel gauge in your ship carefully!
+
+Fuel you collect fills your tank. Any extra is added to your score. Collect enough extra fuel and you can advance to the next level.
+
+Beware of automated mines guarding the fuel asteroids.
+
 - Use `W`, `A`, `S`, and `D` to move
-- Collect fuel pods by approaching them
+- Collect asteroids by approaching them
 - Avoid enemies
 - Watch your fuel gauge -- don't run out
 - Extra fuel is added to your score -- collect enough to advance
@@ -60,7 +68,7 @@ Hours: 3
 
 ## January 7, 2013
 
-Added a simple animation to show fuel being absorbed into the player ship. It works by checking for a "collision" between the fuel pods and the ship. All of the collision detection and animation code is in the fuel pods rather than the ship. If it was in the ship, I'd have to code a loop to check for collisions with each fuel pod.
+Added a simple animation to show fuel being absorbed into the player ship. It works by checking for a "collision" between the asteroids and the ship. All of the collision detection and animation code is in the asteroids rather than the ship. If it was in the ship, I'd have to code a loop to check for collisions with each asteroid.
 
 Changed mechanics a little so that the ship's fuel can only increase to a maximum amount. Any fuel collected beyond that is added to a surplus fuel counter which I'm thinking is, essentially, the player score.
 
@@ -78,7 +86,7 @@ Hours: 3
 
 ## January 9, 2013
 
-Added "gravity" to the tractor beam so that there is a slight pull towards the fuel pods as they are being absorbed by the player. I'm aiming for a somewhat subtle effect. It can be used by players to line up their runs to collect as much fuel as possible without thrusters. The extra pull encourages players to develop a flow, slingshotting themselves from one fuel pod to the next.
+Added "gravity" to the tractor beam so that there is a slight pull towards the asteroids as they are being absorbed by the player. I'm aiming for a somewhat subtle effect. It can be used by players to line up their runs to collect as much fuel as possible without thrusters. The extra pull encourages players to develop a flow, slingshotting themselves from one asteroid to the next.
 
 Used Audacity and http://www.bfxr.net/ to make sound effects.
 
@@ -98,7 +106,7 @@ Hours: 12
 
 ## January 10, 2013
 
-Added self destruct button, animation, and sound effect. For those moments when you run out of fuel and you're bored of waiting for a fuel pod to float within range.
+Added self destruct button, animation, and sound effect. For those moments when you run out of fuel and you're bored of waiting for a asteroid to float within range.
 
 The framework (Zoetrope with Love2d) I'm using says you can play() a sound that is already playing and nothing happens (it'll just keep playing). But I've found that if you do that in the update loop then the game crashes at random times. The solution is just to check if the sound is already playing first.
 
@@ -107,3 +115,7 @@ Added levels.
 Added game play instructions. Bug fixes.
 
 Hours: 6
+
+## January 11, 2013
+
+Game is really coming together now. It's fully playable with a classic start screen, level progression, and a game over screen.

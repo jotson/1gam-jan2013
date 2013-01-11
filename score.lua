@@ -20,10 +20,10 @@
 -- SOFTWARE.
 
 score = {
-    level_total = 0,
-    game_total = 0,
-    game_score = 0,
-    graph = {},
+    level_total = 0, -- Fuel collected this level
+    level_graph = {}, -- Graph of fuel collected/second this level
+    game_total = 0, -- Fuel collected this game
+    game_score = 0, -- Game score
 
     startGame = function(self)
         self.game_total = 0
@@ -33,7 +33,7 @@ score = {
 
     startLevel = function(self)
         self.level_total = 0
-        self.graph = {}
+        self.level_graph = {}
         self.start_time = os.time()
     end,
 
@@ -45,11 +45,11 @@ score = {
         self.game_score = self.game_score + fuel * the.app.level * 100
 
         while true do
-            if self.graph[index] then
-                self.graph[index] = self.graph[index] + fuel
+            if self.level_graph[index] then
+                self.level_graph[index] = self.level_graph[index] + fuel
                 break
             else
-                table.insert(self.graph, 0)
+                table.insert(self.level_graph, 0)
             end
         end
     end,
@@ -61,6 +61,10 @@ score = {
         -- fpm = math.ceil(fpm*100)/100
         fpm = math.floor(fpm)
         return fpm
+    end,
+
+    getFuel = function(self)
+        return math.floor(self.level_total) or 0
     end,
 
     getTotalFuel = function(self)

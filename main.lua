@@ -251,7 +251,22 @@ the.app = App:new{
             player:selfDestruct()
         end
 
-        -- TODO Level advance
+        -- Level advance
+        local fuel_goal
+        if levels[self.level] then
+            fuel_goal = levels[self.level].fuel
+        else
+            fuel_goal = 1000
+        end
+        if score:getFuel() > fuel_goal then
+            self.level = self.level + 1
+
+            score:startLevel()
+
+            enemies:create(1)
+
+            self.level_spr:show("LEVEL " .. self.level, 4)
+        end
     end,
 
     onDraw = function(self)
