@@ -119,3 +119,7 @@ Hours: 6
 ## January 11, 2013
 
 Game is really coming together now. It's fully playable with a classic start screen, level progression, and a game over screen.
+
+Now that the game is playable from beginning to end, I'm starting on some of the polish I'd been putting off. First up is making the HUD look awesome.
+
+Hours: 

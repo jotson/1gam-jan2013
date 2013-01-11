@@ -23,7 +23,7 @@ Fuel = Sprite:extend{
     STATE_FLOATING = 1,
     STATE_EVAPORATING = 2,
     FUEL_DRAIN_PER_SECOND = 40,
-    FUEL_SIZE_RATIO = 0.5,
+    FUEL_SIZE_RATIO = 0.35,
     TRACTOR_GRAVITY = 20,
 
     acceleration = { x = 0, y = 0 },
@@ -38,7 +38,7 @@ Fuel = Sprite:extend{
 
         self.x = math.random(0, arena.width)
         self.y = math.random(0, arena.height)
-        self.fuel = math.random(5,30)
+        self.fuel = math.random(10,50)
         self.radius = self.fuel * self.FUEL_SIZE_RATIO
         self.width = self.radius
         self.height = self.radius

@@ -28,13 +28,12 @@ score = {
     startGame = function(self)
         self.game_total = 0
         self.game_score = 0
+        self.start_time = os.time()
         self:startLevel()
     end,
 
     startLevel = function(self)
         self.level_total = 0
-        self.level_graph = {}
-        self.start_time = os.time()
     end,
 
     add = function(self, fuel)
@@ -60,6 +59,7 @@ score = {
         if min == 0 then fpm = 0 end
         -- fpm = math.ceil(fpm*100)/100
         fpm = math.floor(fpm)
+        if fpm > 999 then fpm = 999 end
         return fpm
     end,
 

@@ -48,6 +48,8 @@ the.app = App:new{
         self.enemy_font = love.graphics.newFont("fnt/8thcargo.ttf", 16) -- No symbols
 
         self.start_overlay = love.graphics.newImage("img/start.png")
+        hud.bg = love.graphics.newImage("img/hud.png")
+
 
         -- Sprite for showing level information
         self.level_spr = Text:new{
@@ -284,7 +286,7 @@ the.app = App:new{
     end,
 
     drawStart = function(self)
-        drawHUD()
+        hud:draw()
 
         local blink_factor = math.abs(math.sin(love.timer.getMicroTime()*1.2))
 
@@ -307,7 +309,7 @@ the.app = App:new{
     end,
 
     drawGameover = function(self)
-        drawHUD()
+        hud:draw()
 
         local blink_factor = math.abs(math.sin(love.timer.getMicroTime()*1.2))
 
@@ -316,15 +318,14 @@ the.app = App:new{
 
         love.graphics.setFont(self.huge_font)
         love.graphics.setColor(255, 0, 0, 255)
-        love.graphics.printf("GAME OVER", 0, arena.height/2 - 50, arena.width, "center")
-        love.graphics.printf("SCORE: " .. score:getScore(), 0, arena.height/2, arena.width, "center")
+        love.graphics.printf("GAME OVER\nSCORE " .. score:getScore() .. "\nLEVEL " .. self.level, 0, arena.height/2 - 100, arena.width, "center")
         love.graphics.setColor(255, 255, 255, blink_factor*200+55)
         love.graphics.printf("[SPACE] TO START OVER", 0, arena.height+10, arena.width, "center")
         love.graphics.printf("[ESC] TO QUIT", 0, arena.height+40, arena.width, "center")
     end,
 
     drawPlaying = function(self)
-        drawHUD()
+        hud:draw()
 
         -- Simple camera shake
         if self.shake ~= 0 then
