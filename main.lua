@@ -37,7 +37,7 @@ the.app = App:new{
     STATE_GAMEOVER = 2,
     STATE_PLAYING = 3,
 
-    name = "#onegameamonth jan/2013",
+    name = "eins eins funf (115) :: #onegameamonth jan/2013",
     shake = 0,
     level = 1,
 
@@ -52,6 +52,7 @@ the.app = App:new{
         -- Sprite for showing level information
         self.level_spr = Text:new{
             text = "",
+            tint = { 1, 0, 0 },
             font = {"fnt/jupiter.ttf", 36},
             align = "center",
             width = arena.width,
@@ -68,9 +69,10 @@ the.app = App:new{
         }
         self:add(self.level_spr)
 
-        -- Sprite for showing tips
-        self.tip_spr = Text:new{
+        -- Instructions sprite
+        self.instr_spr = Text:new{
             text = "",
+            tint = { 1, 0, 0 },
             font = {"fnt/jupiter.ttf", 36},
             align = "center",
             width = arena.width,
@@ -78,14 +80,53 @@ the.app = App:new{
             alpha = 0,
             x = 0,
             y = 50,
+            lines = {
+                "W,A,S,D TO MOVE",
+                "WATCH YOUR FUEL",
+                "COLLECT FUEL FROM ASTEROIDS",
+                "COLLECT EXTRA FUEL TO ADVANCE",
+                "AVOID MINES"
+            },
 
-            show = function(self, text, seconds)
+            show = function(self)
+                self.beep = love.audio.newSource("snd/homing.ogg", "static")
+
+                love.audio.play(self.beep)
+                local s = 2
                 self.alpha = 1
-                self.text = text
-                the.view.tween:start(self, 'alpha', 0, seconds, "quadIn")
+                self.text = self.lines[1]
+                the.view.tween:start(self, 'alpha', 0, s, "quadIn")
+                :andThen(
+                    function()
+                        love.audio.play(self.beep)
+                        self.alpha = 1
+                        self.text = self.lines[2]
+                        the.view.tween:start(self, 'alpha', 0, s, "quadIn")
+                        :andThen(
+                            function()
+                                love.audio.play(self.beep)
+                                self.alpha = 1
+                                self.text = self.lines[3]
+                                the.view.tween:start(self, 'alpha', 0, s, "quadIn")
+                                :andThen(
+                                    function()
+                                        love.audio.play(self.beep)
+                                        self.alpha = 1
+                                        self.text = self.lines[4]
+                                        the.view.tween:start(self, 'alpha', 0, s, "quadIn")
+                                        :andThen(
+                                            function()
+                                                love.audio.play(self.beep)
+                                                self.alpha = 1
+                                                self.text = self.lines[5]
+                                                the.view.tween:start(self, 'alpha', 0, s, "quadIn")
+                                            end)
+                                        end)
+                                    end)
+                    end)
             end
         }
-        self:add(self.tip_spr)
+        self:add(self.instr_spr)
 
         self:add(arena)
         fuel:create(20)
@@ -102,6 +143,7 @@ the.app = App:new{
     changeState = function(self, state)
         if state == self.STATE_START then
             player.state = player.STATE_DEAD
+            self:remove(player)
             self:add(self.enemy_start)
 
             self.state = state
@@ -115,7 +157,7 @@ the.app = App:new{
 
         if state == self.STATE_GAMEOVER then
             player.state = player.STATE_DEAD
-            the.app:remove(player)
+            self:remove(player)
 
             self.state = state
         end
@@ -149,7 +191,7 @@ the.app = App:new{
             love.event.push("quit")
         end
 
-        if the.keys:justPressed('1', '2', '3', '4', '5', '6', '7', '8', '9') then
+        if the.keys:justPressed(' ', '1', '2', '3', '4', '5', '6', '7', '8', '9') then
             self:changeState(self.STATE_PLAYING)
             
             score:startGame()
@@ -160,11 +202,17 @@ the.app = App:new{
             self:add(player)
             player:reset()
 
-            self.level = string.byte(the.keys.typed) - string.byte('0')
-            self.level_spr:show("LEVEL " .. self.level, 4)
-            if levels[self.level].tip then
-                self.tip_spr:show(levels[self.level].tip, 6)
+            if the.keys.typed == ' ' then
+                self.level = 1
+            else
+                self.level = string.byte(the.keys.typed) - string.byte('0')
             end
+
+            self.level_spr:show("LEVEL " .. self.level, 4)
+            if self.level == 1 then
+                the.view.timer:after(2, function() self.instr_spr:show() end)
+            end
+
             fuel:create(20)
             enemies:create(levels[self.level].enemies)
 
@@ -231,15 +279,15 @@ the.app = App:new{
         love.graphics.draw(self.start_overlay, 0, 0)
 
         love.graphics.setFont(self.big_font)
-        local titles = "One Game A Month\nJanuary 2013\n\nProgramming, art, music, sound, and design by John Watson\nflagrantdisregard.com\n\nSource + dev journal @ \ngithub.com/jotson/OGAM-January2013\n\n(c) 2013 John Watson\nLicensed under the MIT license"
+        local titles = "One Game A Month\nJanuary 2013\n\"Eins Eins Funf (115)\"\n\nProgramming, art, music, sound, and design by John Watson\nflagrantdisregard.com\n\nSource + dev journal @ \ngithub.com/jotson/OGAM-January2013\n\n(c) 2013 John Watson\nLicensed under the MIT license"
         love.graphics.setColor(0, 0, 0, 255)
-        love.graphics.printf(titles, 403, 53, 350, "right")
+        love.graphics.printf(titles, 403, 43, 350, "right")
         love.graphics.setColor(100, 200, 255, 255)
-        love.graphics.printf(titles, 400, 50, 350, "right")
+        love.graphics.printf(titles, 400, 40, 350, "right")
 
         love.graphics.setFont(self.huge_font)
         love.graphics.setColor(255, 255, 255, blink_factor*200+55)
-        love.graphics.printf("PRESS NUMBER KEY TO SELECT LEVEL", 0, arena.height+10, arena.width, "center")
+        love.graphics.printf("[SPACE] TO START", 0, arena.height+10, arena.width, "center")
         love.graphics.printf("[ESC] TO QUIT", 0, arena.height+40, arena.width, "center")
     end,
 
@@ -252,11 +300,12 @@ the.app = App:new{
         love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
         love.graphics.setFont(self.huge_font)
-        love.graphics.setColor(255, 255, 255, 255)
+        love.graphics.setColor(255, 0, 0, 255)
         love.graphics.printf("GAME OVER", 0, arena.height/2 - 50, arena.width, "center")
-        love.graphics.printf("SCORE: " .. score:getTotalFuel(), 0, arena.height/2, arena.width, "center")
+        love.graphics.printf("SCORE: " .. score:getScore(), 0, arena.height/2, arena.width, "center")
         love.graphics.setColor(255, 255, 255, blink_factor*200+55)
-        love.graphics.printf("[SPACE] TO RE-START /// [ESC] TO QUIT", 0, arena.height+20, arena.width, "center")
+        love.graphics.printf("[SPACE] TO START OVER", 0, arena.height+10, arena.width, "center")
+        love.graphics.printf("[ESC] TO QUIT", 0, arena.height+40, arena.width, "center")
     end,
 
     drawPlaying = function(self)

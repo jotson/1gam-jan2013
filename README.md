@@ -104,4 +104,6 @@ The framework (Zoetrope with Love2d) I'm using says you can play() a sound that 
 
 Added levels.
 
-Hours: 1
+Added game play instructions. Bug fixes.
+
+Hours: 6

@@ -48,12 +48,15 @@ function drawHUD()
 
         -- Fuel/minute gauge
         local x1 = 320
-        local x2 = 430
+        local x2 = 460
         love.graphics.print("FUEL/MIN", x1, arena.height)
         love.graphics.print(score:getFuelPerMinute(), x2, arena.height)
 
         love.graphics.print("TOTAL", x1, arena.height+20)
         love.graphics.print(score:getTotalFuel(), x2, arena.height+20)
+
+        love.graphics.print("SCORE", x1, arena.height+40)
+        love.graphics.print(score:getScore(), x2, arena.height+40)
     end
 
     -- Static

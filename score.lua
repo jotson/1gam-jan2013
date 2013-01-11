@@ -22,10 +22,12 @@
 score = {
     level_total = 0,
     game_total = 0,
+    game_score = 0,
     graph = {},
 
     startGame = function(self)
         self.game_total = 0
+        self.game_score = 0
         self:startLevel()
     end,
 
@@ -40,6 +42,7 @@ score = {
 
         self.level_total = self.level_total + fuel
         self.game_total = self.game_total + fuel
+        self.game_score = self.game_score + fuel * the.app.level * 100
 
         while true do
             if self.graph[index] then
@@ -62,6 +65,10 @@ score = {
 
     getTotalFuel = function(self)
         return math.floor(self.game_total) or 0
+    end,
+
+    getScore = function(self)
+        return math.floor(self.game_score) or 0
     end,
 
     update = function(self)

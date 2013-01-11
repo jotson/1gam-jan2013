@@ -1,6 +1,6 @@
 levels = {
-    { enemies = 0, fuel = 100, tip = "Use W,A,S,D keys to move. Approach fuel pods to collect." },
-    { enemies = 1, fuel = 200, tip = "Avoid scanners." },
+    { enemies = 0, fuel = 100 },
+    { enemies = 1, fuel = 200 },
     { enemies = 2, fuel = 500 },
     { enemies = 3, fuel = 500 },
     { enemies = 4, fuel = 500 },
