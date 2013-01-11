@@ -36,8 +36,6 @@ player = Sprite:new{
     self_destruct = 0,
 
     onNew = function(self)
-        self.state = self.STATE_ALIVE
-
         self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
         self.thrust_snd:setLooping(true)
         self.out_of_fuel_snd = love.audio.newSource("snd/out_of_fuel.ogg", "static")
@@ -46,8 +44,6 @@ player = Sprite:new{
         self.surplus_snd = love.audio.newSource("snd/beep.ogg", "static")
         self.self_destruct_snd = love.audio.newSource("snd/self_destruct.ogg", "static")
 
-        self.x = arena.width/2
-        self.y = arena.height/2
         self.width = self.radius
         self.height = self.radius
         self.maxVelocity.x = 100
@@ -55,7 +51,9 @@ player = Sprite:new{
         self.minVelocity.x = -100
         self.minVelocity.y = -100
         self.drag = { x = self.THRUST/10, y = self.THRUST/10 }
-        self.fuel = self.STARTING_FUEL
+
+        self:reset()
+        self.state = self.STATE_DEAD
 
         -- Setup explosion emitter
         self.explosion_emitter = Emitter:new{
@@ -148,8 +146,13 @@ player = Sprite:new{
         if not self.self_destruct_snd:isStopped() then
             self.self_destruct_snd:stop()
         end
+        if not self.thrust_snd:isStopped() then
+            self.thrust_snd:stop()
+        end
 
+        the.app:remove(self)
         self.state = self.STATE_DEAD
+        the.app.state = the.app.STATE_GAMEOVER
     end,
 
     selfDestruct = function(self)
@@ -184,6 +187,17 @@ player = Sprite:new{
         end
 
         self.is_thrusting = true
+    end,
+
+    reset = function(self)
+        self.x = arena.width/2
+        self.y = arena.height/2
+        self.fuel = self.STARTING_FUEL
+        self.state = self.STATE_ALIVE
+        self.velocity.x = 0
+        self.velocity.y = 0
+        self.acceleration.x = 0
+        self.acceleration.y = 0
     end,
 
     addFuel = function(self, fuel)

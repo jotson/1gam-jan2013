@@ -50,15 +50,13 @@ Enemy = Sprite:extend{
         self.offset = math.random()*10
         self.state = self.STATE_IDLE
         the.view.tween:start(self, 'alpha', 1, 0.75)
-
-        the.app:add(self)
     end,
 
     onDraw = function(self, x, y)
         love.graphics.push()
 
         love.graphics.translate(x, y)
-        love.graphics.rotate(math.sin(love.timer.getMicroTime())*math.pi)
+        love.graphics.rotate(math.sin(love.timer.getMicroTime())*math.pi+self.offset)
 
         -- Detection radius
         if self.state == self.STATE_IDLE then
@@ -216,4 +214,36 @@ Enemy = Sprite:extend{
         end
         return false
     end,
+}
+
+enemies = {
+    list = {},
+
+    create = function(self, n)
+        if n == nil then n = 1 end
+
+        for i = 1,n do
+            local f = Enemy:new()
+            table.insert(self.list, f)
+            the.app:add(f)
+        end
+    end,
+
+    destroy = function(self, object)
+        for i = #self.list,1,-1 do
+            if self.list[i] == object then
+                table.remove(self.list, i)
+                the.app:remove(object)
+                object:die()
+            end
+        end
+    end,
+
+    destroyAll = function(self)
+        for i = #self.list,1,-1 do
+            the.app:remove(self.list[i])
+            self.list[i]:die()
+            table.remove(self.list, i)
+        end
+    end
 }

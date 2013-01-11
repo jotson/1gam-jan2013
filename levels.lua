@@ -1,0 +1,18 @@
+levels = {
+    { enemies = 0, fuel = 100, tip = "Use W,A,S,D keys to move. Approach fuel pods to collect." },
+    { enemies = 1, fuel = 200, tip = "Avoid scanners." },
+    { enemies = 2, fuel = 500 },
+    { enemies = 3, fuel = 500 },
+    { enemies = 4, fuel = 500 },
+    { enemies = 5, fuel = 500 },
+    { enemies = 6, fuel = 500 },
+    { enemies = 7, fuel = 500 },
+    { enemies = 8, fuel = 500 },
+    { enemies = 9, fuel = 500 },
+    { enemies = 10, fuel = 1000 },
+    { enemies = 11, fuel = 1000 },
+    { enemies = 12, fuel = 1000 },
+    { enemies = 13, fuel = 1000 },
+    { enemies = 14, fuel = 1000 },
+    { enemies = 15, fuel = 1000 },
+}

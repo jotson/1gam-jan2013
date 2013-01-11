@@ -23,7 +23,7 @@ arena = Fill:extend{
     width = love.graphics.getWidth(),
     height = love.graphics.getHeight() - 100,
     fill = { 0, 0, 0, 0 },
-    border = { 255, 255, 255, 10 },
+    border = { 255, 255, 255, 0 },
 
     highlightWall = function(self, object, x, y)
         if object == player then

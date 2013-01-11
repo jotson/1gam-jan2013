@@ -25,34 +25,36 @@ function drawHUD()
     love.graphics.setFont(the.app.big_font)
     love.graphics.setColor(100, 200, 255, math.random(100,150))
 
-    -- Draw score graph
-    local BARS = 60
-    local MAX_HEIGHT = 80
-    local max = 0
-    for i = #score.graph-BARS, #score.graph do
-        if score.graph[i] then
-            max = math.max(score.graph[i], max)
+    if the.app.state == the.app.STATE_PLAYING or the.app.state == the.app.STATE_GAMEOVER then
+        -- Draw score graph
+        local BARS = 60
+        local MAX_HEIGHT = 80
+        local max = 0
+        for i = #score.graph-BARS, #score.graph do
+            if score.graph[i] then
+                max = math.max(score.graph[i], max)
+            end
         end
-    end
-    if max == 0 then max = 1 end
-    local w = 4
-    for n = 0, BARS-1 do
-        i = #score.graph - n
-        if score.graph[i] then
-            love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, score.graph[i]/max * MAX_HEIGHT + 1)
-        else
-            love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, 1)
+        if max == 0 then max = 1 end
+        local w = 4
+        for n = 0, BARS-1 do
+            i = #score.graph - n
+            if score.graph[i] then
+                love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, score.graph[i]/max * MAX_HEIGHT + 1)
+            else
+                love.graphics.rectangle("fill", 1 + n * (w+1), arena.height+1, w, 1)
+            end
         end
+
+        -- Fuel/minute gauge
+        local x1 = 320
+        local x2 = 430
+        love.graphics.print("FUEL/MIN", x1, arena.height)
+        love.graphics.print(score:getFuelPerMinute(), x2, arena.height)
+
+        love.graphics.print("TOTAL", x1, arena.height+20)
+        love.graphics.print(score:getTotalFuel(), x2, arena.height+20)
     end
-
-    -- Fuel/minute gauge
-    local x1 = 320
-    local x2 = 430
-    love.graphics.print("FUEL/MIN", x1, arena.height)
-    love.graphics.print(score:getFuelPerMinute(), x2, arena.height)
-
-    love.graphics.print("TOTAL", x1, arena.height+20)
-    love.graphics.print(score:getTotalFuel(), x2, arena.height+20)
 
     -- Static
     love.graphics.setColor(255, 255, 255, math.random(50,100))

@@ -101,3 +101,7 @@ Hours: 12
 Added self destruct button, animation, and sound effect. For those moments when you run out of fuel and you're bored of waiting for a fuel pod to float within range.
 
 The framework (Zoetrope with Love2d) I'm using says you can play() a sound that is already playing and nothing happens (it'll just keep playing). But I've found that if you do that in the update loop then the game crashes at random times. The solution is just to check if the sound is already playing first.
+
+Added levels.
+
+Hours: 1

@@ -160,11 +160,20 @@ fuel = {
     end,
 
     destroy = function(self, object)
-        for i = 1, table.getn(self.list) do
+        for i = #self.list,1,-1 do
             if self.list[i] == object then
                 table.remove(self.list, i)
+                the.app:remove(object)
                 object:die()
             end
+        end
+    end,
+
+    destroyAll = function(self)
+        for i = #self.list,1,-1 do
+            the.app:remove(self.list[i])
+            self.list[i]:die()
+            table.remove(self.list, i)
         end
     end
 }
