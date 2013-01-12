@@ -32,6 +32,7 @@ Enemy = Sprite:extend{
     width = 5,
     height = 5,
     alpha = 0,
+    demo = false,
 
     onNew = function(self)
         self.scan_snd = love.audio.newSource("snd/scanning.ogg", "static")
@@ -53,6 +54,8 @@ Enemy = Sprite:extend{
     end,
 
     onDraw = function(self, x, y)
+        if not self.visible then return end
+
         love.graphics.push()
 
         love.graphics.translate(x, y)
@@ -116,6 +119,8 @@ Enemy = Sprite:extend{
     end,
 
     onUpdate = function(self, dt)
+        if self.demo == true then return end
+
         if player.state == player.STATE_ALIVE then
             self:collide(player)
         end
@@ -255,5 +260,5 @@ enemies = {
             end
         end
         return false
-    end,
+    end
 }

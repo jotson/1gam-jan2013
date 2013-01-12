@@ -21,6 +21,7 @@
 
 hud = {
     bg = nil,
+    scanner_enemy = nil,
 
     draw = function(self)
         love.graphics.push()
@@ -98,6 +99,19 @@ hud = {
             self:drawGauge(501, arena.height+23, 10, player.maxVelocity.y, math.abs(player.velocity.y))
             self:drawGauge(310, arena.height+76, 10, player.THRUST, math.abs(player.acceleration.x))
             self:drawGauge(492, arena.height+76, 10, player.THRUST, math.abs(player.acceleration.y))
+
+            -- Scanner images
+            local tint = math.random(0,1)
+            self.scanner_enemy.x = arena.width/2
+            self.scanner_enemy.y = arena.height + 45
+            self.scanner_enemy.state = Enemy.STATE_HOMING
+            self.scanner_enemy.scale = 0.6
+            if under_attack then
+                self.scanner_enemy:revive()
+            else
+                self.scanner_enemy:die()
+            end
+            self.scanner_view:draw()
         end
 
         self:drawStatic(7, arena.height+8, 215, 86)

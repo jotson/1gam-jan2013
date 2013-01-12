@@ -88,6 +88,8 @@ Fuel = Sprite:extend{
     end,
 
     onUpdate = function(self, dt)
+        if self.demo == true then return end
+
         self.state = self.STATE_FLOATING
 
         if self:collide(player) then
@@ -175,5 +177,14 @@ fuel = {
             self.list[i]:die()
             table.remove(self.list, i)
         end
+    end,
+
+    attackingPlayer = function(self)
+        for i = 1,#self.list do
+            if self.list[i].state == Fuel.STATE_EVAPORATING then
+                return true
+            end
+        end
+        return false
     end
 }

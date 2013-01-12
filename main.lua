@@ -51,7 +51,7 @@ the.app = App:new{
         hud.bg = love.graphics.newImage("img/hud.png")
 
         love.mouse.setVisible(false)
-        
+
         -- Sprite for showing level information
         self.level_spr = Text:new{
             text = "",
@@ -135,7 +135,14 @@ the.app = App:new{
         fuel:create(20)
         enemies:create(3)
 
-        self.enemy_start = Enemy:new()
+        -- Enemy for the start screen
+        self.enemy_start = Enemy:new{ demo = true }
+
+        -- Enemy and asteroid for the HUD scanner
+        hud.scanner_view = View:new()
+        hud.scanner_enemy = Enemy:new{ demo = true }
+        hud.scanner_view:add(hud.scanner_enemy)
+        self:add(hud.scanner_view)
 
         score:startGame()
         the.view.timer:every(1, function() score:update() end)
@@ -166,7 +173,7 @@ the.app = App:new{
         end
     end,
 
-    onUpdate = function(self)
+    onUpdate = function(self, dt)
         if self.state == self.STATE_START then
             self:updateStart()
         end
@@ -186,9 +193,6 @@ the.app = App:new{
         self.enemy_start.y = arena.height - 100
         self.enemy_start.state = Enemy.STATE_HOMING
         self.enemy_start.scale = 8
-        if not self.enemy_start.scan_snd:isStopped() then
-            self.enemy_start.scan_snd:stop()
-        end
 
         if the.keys:justPressed('escape') then
             love.event.push("quit")
