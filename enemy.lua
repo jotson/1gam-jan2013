@@ -246,5 +246,14 @@ enemies = {
             self.list[i]:die()
             table.remove(self.list, i)
         end
-    end
+    end,
+
+    attackingPlayer = function(self)
+        for i = 1,#self.list do
+            if self.list[i].state == Enemy.STATE_HOMING then
+                return true
+            end
+        end
+        return false
+    end,
 }

@@ -34,6 +34,7 @@ player = Sprite:new{
     is_thrusting = false,
     speed = 0,
     self_destruct = 0,
+    attacked = false,
 
     onNew = function(self)
         self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
@@ -196,6 +197,7 @@ player = Sprite:new{
         self.velocity.y = 0
         self.acceleration.x = 0
         self.acceleration.y = 0
+        self.attacked = false
     end,
 
     addFuel = function(self, fuel)
@@ -276,6 +278,7 @@ player = Sprite:new{
         self.acceleration.x = 0
         self.acceleration.y = 0
         self.is_thrusting = false
+        self.attacked = false
     end
 }
 

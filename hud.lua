@@ -25,15 +25,22 @@ hud = {
     draw = function(self)
         love.graphics.push()
 
+        local under_attack = enemies:attackingPlayer()
+
         if the.app.state == the.app.STATE_START then
             love.graphics.setColor(255, 0, 0, 255)
-            love.graphics.draw(self.bg, 0, arena.height)
+        elseif under_attack then
+            love.graphics.setColor(255, 0, 0, 255)
         else
             love.graphics.setColor(255, 255, 255, 255)
-            love.graphics.draw(self.bg, 0, arena.height)
         end
+        love.graphics.draw(self.bg, 0, arena.height)
 
-        love.graphics.setColor(100, 200, 255, math.random(100,150))
+        if under_attack then
+            love.graphics.setColor(255, 0, 0, math.random(100,150))
+        else
+            love.graphics.setColor(100, 200, 255, math.random(100,150))
+        end
 
         if the.app.state == the.app.STATE_PLAYING or the.app.state == the.app.STATE_GAMEOVER then
             -- Draw score graph
@@ -74,8 +81,23 @@ hud = {
             -- Fuel tank
             local tank_height = 65
             local tank_fill = score:getFuel()/levels[the.app.level].fuel * tank_height
-            love.graphics.setColor(100, 255, 200, math.random(100, 150))
+            if under_attack then
+                love.graphics.setColor(255, 0, 0, math.random(100, 150))
+            else
+                love.graphics.setColor(100, 255, 200, math.random(100, 150))
+            end
             love.graphics.rectangle("fill", 226, arena.height+10+tank_height-tank_fill, 40, tank_fill)
+
+            -- Gauges
+            if under_attack then
+                love.graphics.setColor(255, 0, 0, math.random(100, 150))
+            else
+                love.graphics.setColor(255, 255, 255, math.random(100, 150))
+            end
+            self:drawGauge(298, arena.height+23, 10, player.maxVelocity.x, math.abs(player.velocity.x))
+            self:drawGauge(501, arena.height+23, 10, player.maxVelocity.y, math.abs(player.velocity.y))
+            self:drawGauge(310, arena.height+76, 10, player.THRUST, math.abs(player.acceleration.x))
+            self:drawGauge(492, arena.height+76, 10, player.THRUST, math.abs(player.acceleration.y))
         end
 
         self:drawStatic(7, arena.height+8, 215, 86)
@@ -91,6 +113,10 @@ hud = {
         end
     end,
 
-    drawGauge = function(self, x, y, r, min, max, value)
+    drawGauge = function(self, x, y, r, max, value)
+        local a = value/max * math.pi * 2 * .75 + .75 * math.pi
+        local x1 = math.cos(a)*r
+        local y1 = math.sin(a)*r
+        love.graphics.line(x, y, x+x1, y+y1)
     end
 }
