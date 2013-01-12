@@ -39,12 +39,15 @@ Enemy = Sprite:extend{
         self.detected_snd = love.audio.newSource("snd/detected.ogg", "static")
         self.homing_snd = love.audio.newSource("snd/homing.ogg", "static")
 
-        self.x = math.random(50, arena.width-50)
-        if self.x > player.x - self.DETECTION_DISTANCE and self.x < player.x + self.DETECTION_DISTANCE then
-            self.y = math.random(50, player.y - self.DETECTION_DISTANCE)
-        else
+        -- Try up to 5 times to find a position away from the player
+        for i = 1,5 do
+            self.x = math.random(50, arena.width-50)
             self.y = math.random(50, arena.height-50)
+            if self:distanceTo(player) > self.DETECTION_DISTANCE then
+                break
+            end
         end
+        
         self.minVelocity = { x = -self.MAX_SPEED, y = -self.MAX_SPEED }
         self.maxVelocity = { x = self.MAX_SPEED, y = self.MAX_SPEED }
         self.drag = { x = self.THRUST, y = self.THRUST }

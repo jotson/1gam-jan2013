@@ -120,8 +120,8 @@ Hours: 6
 
 Game is really coming together now. It's fully playable with a classic start screen, level progression, and a game over screen.
 
-Now that the game is playable from beginning to end, I'm starting on some of the polish I'd been putting off. First up is making the HUD look awesome.
+Now that the game is playable from beginning to end, I'm starting on some of the polish I'd been putting off. First up is making the HUD look awesome. This phase is fun but it's very time consuming. Making art and music is hard.
 
 Managing the state of the game almost isn't a problem but I can see that it could get very complicated for a game even moderately more complex than this one. The state of the player, the world, and other objects in game and how they all interact is crazy. For my next game, I need to do some research into state management to see if there's a sane way to manage state and changes between state.
 
-Hours: 
+Hours: 10
