@@ -21,6 +21,7 @@ Beware of automated mines guarding the fuel asteroids. Although, some pilots hav
 - Watch your fuel gauge -- don't run out
 - Extra fuel is added to your score -- collect enough to advance
 - Press `0` to self destruct
+- Press `1`-`9` on start screen to start on that level
 
 # Dev journal
 
