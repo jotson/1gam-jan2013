@@ -11,9 +11,9 @@ You are a humble fuel thief trying to make ends meet in a lonely universe.
 
 Maneuver your ship next to asteroids to mine them for fuel. Your ship has a limited amount of fuel. Watch the fuel gauge in your ship carefully!
 
-Fuel you collect fills your tank. Any extra is added to your score. Collect enough extra fuel and you can advance to the next level.
+Fuel you collect fills your tank. Any extra is added to your score. Collect enough extra fuel and to advance to the next level.
 
-Beware of automated mines guarding the fuel asteroids.
+Beware of automated mines guarding the fuel asteroids. Although, some pilots have been known to increase their street cred by collecting fuel while being scanned...
 
 - Use `W`, `A`, `S`, and `D` to move
 - Collect asteroids by approaching them
@@ -122,6 +122,14 @@ Game is really coming together now. It's fully playable with a classic start scr
 
 Now that the game is playable from beginning to end, I'm starting on some of the polish I'd been putting off. First up is making the HUD look awesome. This phase is fun but it's very time consuming. Making art and music is hard.
 
+Up to now, all of the graphics have been procedurally generated. Most of it still is but I'm adding some bitmaps, like the cockpit controls. The cockpit is bitmap with open areas that I can draw procedural content onto to bring it to life. Particularly proud of the gauges and the holographic looking scanner.
+
 Managing the state of the game almost isn't a problem but I can see that it could get very complicated for a game even moderately more complex than this one. The state of the player, the world, and other objects in game and how they all interact is crazy. For my next game, I need to do some research into state management to see if there's a sane way to manage state and changes between state.
 
 Hours: 10
+
+## January 15, 2013
+
+Updated HUD graphic. Bug fixes. Tweaked fuel collection rate.
+
+Added sound effect for completely mining an asteroid. Added bonus points with particles.

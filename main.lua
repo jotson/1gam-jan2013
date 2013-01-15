@@ -24,6 +24,7 @@ STRICT = true
 
 require 'zoetrope'
 require 'shaders'
+require 'particles'
 require 'arena'
 require 'player'
 require 'fuel'
@@ -131,6 +132,7 @@ the.app = App:new{
         }
         self:add(self.instr_spr)
 
+        self:add(player)
         self:add(arena)
         fuel:create(20)
         enemies:create(3)
@@ -144,6 +146,41 @@ the.app = App:new{
         hud.scanner_view:add(hud.scanner_enemy)
         self:add(hud.scanner_view)
 
+        -- Bonus emitters
+        self.bonus1k_emitter = Emitter:new{
+            x = 0,
+            y = 0,
+            width = 1,
+            height = 1,
+            text = "+1000",
+
+            setText = function(self, text)
+                self.text = text
+            end,
+
+            onEmit = function(self)
+                self.x = player.x
+                self.y = player.y
+            end
+        }
+        self.bonus1k_emitter:loadParticles(bonus1k, 5)
+        self:add(self.bonus1k_emitter)
+
+        self.bonusx10_emitter = Emitter:new{
+            x = 0,
+            y = 0,
+            width = 1,
+            height = 1,
+
+            onEmit = function(self)
+                self.x = player.x
+                self.y = player.y
+            end
+        }
+        self.bonusx10_emitter:loadParticles(bonusx10, 100)
+        self:add(self.bonusx10_emitter)
+
+        -- Start game
         score:startGame()
         the.view.timer:every(1, function() score:update() end)
 
@@ -153,7 +190,6 @@ the.app = App:new{
     changeState = function(self, state)
         if state == self.STATE_START then
             player.state = player.STATE_DEAD
-            self:remove(player)
             self:add(self.enemy_start)
 
             self.state = state
@@ -167,7 +203,6 @@ the.app = App:new{
 
         if state == self.STATE_GAMEOVER then
             player.state = player.STATE_DEAD
-            self:remove(player)
 
             self.state = state
         end
@@ -206,7 +241,6 @@ the.app = App:new{
             fuel:destroyAll()
             enemies:destroyAll()
 
-            self:add(player)
             player:reset()
 
             if the.keys.typed == ' ' then
@@ -301,7 +335,7 @@ the.app = App:new{
         love.graphics.draw(self.start_overlay, 0, 0)
 
         love.graphics.setFont(self.big_font)
-        local titles = "One Game A Month\nJanuary 2013\n\"Eins Eins Funf (115)\"\n\nProgramming, art, music, sound, and design by John Watson\nflagrantdisregard.com\n\nSource + dev journal @ \ngithub.com/jotson/OGAM-January2013\n\n(c) 2013 John Watson\nLicensed under the MIT license"
+        local titles = "One Game A Month #1GAM\nJanuary 2013\n\"Eins Eins Funf (115)\"\n\nProgramming, art, music, sound, and design by John Watson\nflagrantdisregard.com\n\nSource + dev journal @ \ngithub.com/jotson/1GAM-January2013\n\n(c) 2013 John Watson\nLicensed under the MIT license"
         love.graphics.setColor(0, 0, 0, 255)
         love.graphics.printf(titles, 403, 43, 350, "right")
         love.graphics.setColor(100, 200, 255, 255)

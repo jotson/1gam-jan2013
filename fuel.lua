@@ -22,7 +22,7 @@
 Fuel = Sprite:extend{
     STATE_FLOATING = 1,
     STATE_EVAPORATING = 2,
-    FUEL_DRAIN_PER_SECOND = 40,
+    FUEL_DRAIN_PER_SECOND = 60,
     FUEL_SIZE_RATIO = 0.35,
     TRACTOR_GRAVITY = 20,
 
@@ -33,8 +33,10 @@ Fuel = Sprite:extend{
         -- Stream to keep memory usage low
         -- This is in Fuel, like the rest of the tractor beam code, to
         -- make it easier to have multiple tractor sounds going at once.
-        self.tractor_snd = love.audio.newSource("snd/tractor_beam.ogg", "stream")
+        self.tractor_snd = love.audio.newSource("snd/tractor_beam.ogg", "static")
         self.tractor_snd:setVolume(0.25)
+        self.ding_snd = love.audio.newSource("snd/ding.ogg", "static")
+        self.ding_snd:setVolume(0.75)
 
         self.x = math.random(0, arena.width)
         self.y = math.random(0, arena.height)
@@ -115,6 +117,10 @@ Fuel = Sprite:extend{
                     if not self.tractor_snd:isStopped() then
                         self.tractor_snd:stop()
                     end
+                    if self.ding_snd:isStopped() then
+                        love.audio.play(self.ding_snd)
+                    end
+                    score:addBonus(1000)
                     fuel:destroy(self)
                     fuel:create(1)
                 end

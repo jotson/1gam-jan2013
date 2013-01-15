@@ -41,7 +41,15 @@ score = {
 
         self.level_total = self.level_total + fuel
         self.game_total = self.game_total + fuel
-        self.game_score = self.game_score + fuel * the.app.level * 100
+
+        if fuel > 0 then
+            local bonus = 100
+            if enemies:attackingPlayer() then
+                bonus = bonus * 10
+                the.app.bonusx10_emitter:emit(1)
+            end
+            self.game_score = self.game_score + fuel * the.app.level * bonus
+        end
 
         while true do
             if self.level_graph[index] then
@@ -51,6 +59,16 @@ score = {
                 table.insert(self.level_graph, 0)
             end
         end
+    end,
+
+    addBonus = function(self, points)
+        points = points * the.app.level
+        if enemies:attackingPlayer() then
+            points = points * 10
+        end
+        self.game_score = self.game_score + points
+        the.app.bonus1k_emitter:setText("+" .. points)
+        the.app.bonus1k_emitter:emit()
     end,
 
     getFuelPerMinute = function(self)
