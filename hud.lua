@@ -48,17 +48,17 @@ hud = {
             local BARS = 51
             local MAX_HEIGHT = 80
             local max = 0
-            for i = #score.level_graph-BARS, #score.level_graph do
-                if score.level_graph[i] then
-                    max = math.max(score.level_graph[i], max)
+            for i = #score.game_graph-BARS, #score.game_graph do
+                if score.game_graph[i] then
+                    max = math.max(score.game_graph[i], max)
                 end
             end
             if max == 0 then max = 1 end
             local w = 3
             for n = 0, BARS-1 do
-                i = #score.level_graph - n
-                if score.level_graph[i] then
-                    love.graphics.rectangle("fill", 15 + n * (w+1), arena.height+9, w, score.level_graph[i]/max * MAX_HEIGHT + 1)
+                i = #score.game_graph - n
+                if score.game_graph[i] then
+                    love.graphics.rectangle("fill", 15 + n * (w+1), arena.height+9, w, score.game_graph[i]/max * MAX_HEIGHT + 1)
                 else
                     love.graphics.rectangle("fill", 15 + n * (w+1), arena.height+9, w, 1)
                 end

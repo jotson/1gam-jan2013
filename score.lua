@@ -21,13 +21,14 @@
 
 score = {
     level_total = 0, -- Fuel collected this level
-    level_graph = {}, -- Graph of fuel collected/second this level
+    game_graph = {}, -- Graph of fuel collected/second this level
     game_total = 0, -- Fuel collected this game
     game_score = 0, -- Game score
 
     startGame = function(self)
         self.game_total = 0
         self.game_score = 0
+        self.game_graph = {}
         self.start_time = os.time()
         self:startLevel()
     end,
@@ -52,11 +53,11 @@ score = {
         end
 
         while true do
-            if self.level_graph[index] then
-                self.level_graph[index] = self.level_graph[index] + fuel
+            if self.game_graph[index] then
+                self.game_graph[index] = self.game_graph[index] + fuel
                 break
             else
-                table.insert(self.level_graph, 0)
+                table.insert(self.game_graph, 0)
             end
         end
     end,

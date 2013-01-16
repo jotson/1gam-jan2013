@@ -41,12 +41,16 @@ the.app = App:new{
     name = "eins eins funf (115) :: #onegameamonth jan/2013",
     shake = 0,
     level = 1,
+    bgmusic = nil,
 
     onRun = function(self)
         self.small_font = love.graphics.newFont("fnt/jupiter.ttf", 16)
         self.big_font = love.graphics.newFont("fnt/jupiter.ttf", 30)
         self.huge_font = love.graphics.newFont("fnt/jupiter.ttf", 40)
         self.enemy_font = love.graphics.newFont("fnt/8thcargo.ttf", 16) -- No symbols
+
+        self.levelup_snd = love.audio.newSource("snd/levelup.ogg", "static")
+        self.levelup_snd:setLooping(false)
 
         self.start_overlay = love.graphics.newImage("img/start.png")
         hud.bg = love.graphics.newImage("img/hud.png")
@@ -180,11 +184,31 @@ the.app = App:new{
         self.bonusx10_emitter:loadParticles(bonusx10, 100)
         self:add(self.bonusx10_emitter)
 
+        -- Start music
+        the.view.timer:every(10, function() self:changeMusic() end)
+        self:changeMusic(1)
+
         -- Start game
         score:startGame()
         the.view.timer:every(1, function() score:update() end)
 
         self:changeState(self.STATE_START)
+    end,
+
+    changeMusic = function(self, n)
+        if self.bgmusic == nil or self.bgmusic:isStopped() then
+            if n == nil then
+                -- Try to choose a random song different than the last one
+                for i = 1,10 do
+                    n = math.random(1,2)
+                    if n ~= self.last_song then break end
+                end
+            end
+            self.last_song = n
+            self.bgmusic = love.audio.newSource("snd/song"..n..".ogg", "stream")
+            self.bgmusic:setVolume(0.3)
+            love.audio.play(self.bgmusic)
+        end
     end,
 
     changeState = function(self, state)
@@ -301,6 +325,10 @@ the.app = App:new{
         end
         if score:getFuel() > fuel_goal then
             self.level = self.level + 1
+
+            if self.levelup_snd:isStopped() then
+                love.audio.play(self.levelup_snd)
+            end
 
             score:startLevel()
 

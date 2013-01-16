@@ -34,7 +34,6 @@ player = Sprite:new{
     is_thrusting = false,
     speed = 0,
     self_destruct = 0,
-    attacked = false,
 
     onNew = function(self)
         self.thrust_snd = love.audio.newSource("snd/thrust.ogg", "static")
@@ -63,8 +62,8 @@ player = Sprite:new{
             width = 1,
             height = 1,
 
-            min = { velocity = { x = -200, y = -200 }},
-            max = { velocity = { x = 200, y = 200 }},
+            min = { velocity = { x = -75, y = -75 }},
+            max = { velocity = { x = 75, y = 75 }},
         }
 
         self.explosion_emitter:loadParticles(Fill:extend{
@@ -74,6 +73,9 @@ player = Sprite:new{
             onEmit = function (self)
                 self.width = math.random(2,6)
                 self.height = 2
+                self.alpha = 1
+                self.velocity.x = self.velocity.x + player.velocity.x
+                self.velocity.y = self.velocity.y + player.velocity.y
                 local t = math.random() * 2
                 -- It's subtle (maybe too subtle) but some of the ship pieces are
                 -- different sizes and rotating
@@ -137,7 +139,9 @@ player = Sprite:new{
             return false
         end
 
-        the.app:add(self.explosion_emitter)
+        if not the.view:contains(self.explosion_emitter) then
+            the.app:add(self.explosion_emitter)
+        end
 
         self.explosion_emitter.x = self.x
         self.explosion_emitter.y = self.y
@@ -156,8 +160,6 @@ player = Sprite:new{
 
     selfDestruct = function(self)
         if self.self_destruct == 0 then
-            self.self_destruct_snd:setLooping(true)
-            love.audio.play(self.self_destruct_snd)
             self.self_destruct = 3
         end
     end,
@@ -197,7 +199,7 @@ player = Sprite:new{
         self.velocity.y = 0
         self.acceleration.x = 0
         self.acceleration.y = 0
-        self.attacked = false
+        self.self_destruct = 0
     end,
 
     addFuel = function(self, fuel)
@@ -263,6 +265,9 @@ player = Sprite:new{
         end
 
         if self.self_destruct > 0 then
+            if self.self_destruct_snd:isStopped() then
+                love.audio.play(self.self_destruct_snd)
+            end
             self.self_destruct = self.self_destruct - dt
             if self.self_destruct <= 0 then
                 self.self_destruct = 0
@@ -278,7 +283,6 @@ player = Sprite:new{
         self.acceleration.x = 0
         self.acceleration.y = 0
         self.is_thrusting = false
-        self.attacked = false
     end
 }
 
