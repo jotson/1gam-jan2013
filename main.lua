@@ -41,6 +41,7 @@ the.app = App:new{
     name = "eins eins funf (115) :: #onegameamonth jan/2013",
     shake = 0,
     level = 1,
+    scanlines = false,
 
     onRun = function(self)
         self.small_font = love.graphics.newFont("fnt/jupiter.ttf", 16)
@@ -63,6 +64,9 @@ the.app = App:new{
 
         -- Uncomment this line to bloom the sprites in the play area
         -- self.view:setEffect("vfx/bloom.shader", "screen")
+
+        -- Uncomment this line to draw retro scanlines on the screen
+        -- self.scanlines = true
         
         love.mouse.setVisible(false)
 
@@ -371,6 +375,15 @@ the.app = App:new{
 
         if self.state == self.STATE_PLAYING then
             self:drawPlaying()
+        end
+
+        -- Scanlines
+        if self.scanlines then
+            love.graphics.setColor(0, 0, 0, 75)
+            love.graphics.setLineWidth(1)
+            for i = 1,love.graphics.getHeight(),3 do
+                love.graphics.line(0, i, love.graphics.getWidth(), i)
+            end
         end
     end,
 
