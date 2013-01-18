@@ -23,7 +23,6 @@ DEBUG = true
 STRICT = true
 
 require 'zoetrope'
-require 'shaders'
 require 'particles'
 require 'arena'
 require 'player'
@@ -55,6 +54,9 @@ the.app = App:new{
         self.start_overlay = love.graphics.newImage("img/start.png")
         hud.bg = love.graphics.newImage("img/hud.png")
 
+        -- Uncomment this line to bloom the sprites in the play area
+        -- self.view:setEffect("vfx/bloom.shader", "screen")
+        
         love.mouse.setVisible(false)
 
         -- Sprite for showing level information

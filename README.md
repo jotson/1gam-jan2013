@@ -134,3 +134,9 @@ Hours: 10
 Updated HUD graphic. Bug fixes. Tweaked fuel collection rate.
 
 Added sound effect for completely mining an asteroid. Added bonus points with particles.
+
+## January 17, 2013
+
+Learned about shaders today. Hacked together a bloom effect from code on the Love2D forum and got it working with Zoetrope. I made a small change to the Zoetrope library to get get it working but I don't know if the bug is with my code or with the library.
+
+After all that, I ended up turning the bloom effect off because my son thought the unbloomed version looked better. I left all the code in though. To turn it on just uncomment the setEffect() line in main.lua.

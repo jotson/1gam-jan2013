@@ -61,6 +61,8 @@ Enemy = Sprite:extend{
 
         love.graphics.push()
 
+        love.graphics.setLineWidth(1)
+
         love.graphics.translate(x, y)
         love.graphics.scale(self.scale)
         love.graphics.rotate(math.sin(love.timer.getMicroTime())*math.pi+self.offset)

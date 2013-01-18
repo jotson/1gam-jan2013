@@ -22,7 +22,7 @@
 bonus1k = Text:extend{
     text = "",
     tint = { 1, 0, 0 },
-    font = {"fnt/jupiter.ttf", 12},
+    font = {"fnt/jupiter.ttf", 16},
     align = "center",
     width = 50,
     height = 10,

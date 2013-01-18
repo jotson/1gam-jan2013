@@ -468,6 +468,7 @@ Group = Class:extend
 
 		if self.effect then
 			if self.effectType == 'screen' then
+				love.graphics.reset()
 				love.graphics.setPixelEffect(self.effect)
 				love.graphics.setCanvas()
 				love.graphics.draw(self._canvas)
