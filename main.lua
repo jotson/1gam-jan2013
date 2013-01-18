@@ -206,7 +206,7 @@ the.app = App:new{
             if n == nil then
                 -- Try to choose a random song different than the last one
                 for i = 1,10 do
-                    n = math.random(1,2)
+                    n = math.random(1,3)
                     if n ~= self.last_song then break end
                 end
             end
