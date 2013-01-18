@@ -1,9 +1,15 @@
 # Running the game
 
+- Install LÖVE: https://love2d.org/
+- Download the game: https://dl.dropbox.com/u/7063628/1gam-jan2013-johnwatson.love
+- Double-click to run it
+
+OR
+
 - Download the source files
-- Unzip into a folder named "january" keeping directory structure intact
+- Unzip keeping the directory structure intact
 - Run it with LÖVE. Example:
-        $ love january
+        $ love [folder name]
 
 # How to play
 
