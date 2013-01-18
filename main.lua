@@ -398,7 +398,7 @@ the.app = App:new{
         love.graphics.draw(self.start_overlay, 0, 0)
 
         love.graphics.setFont(self.big_font)
-        local titles = "One Game A Month #1GAM\nJanuary 2013\n\"Eins Eins Funf (115)\"\n\nProgramming, art, music, sound, and design by John Watson\nflagrantdisregard.com\n\nSource + dev journal @ \ngithub.com/jotson/1GAM-January2013\n\n(c) 2013 John Watson\nLicensed under the MIT license"
+        local titles = "One Game A Month #1GAM\nJanuary 2013\n\"Eins Eins Funf (115)\"\n\nProgramming, art, music, sound, and design by John Watson\nflagrantdisregard.com\n\nSource + dev journal @ \ngithub.com/jotson/1gam-jan2013\n\n(c) 2013 John Watson\nLicensed under the MIT license"
         love.graphics.setColor(0, 0, 0, 255)
         love.graphics.printf(titles, 403, 43, 350, "right")
         love.graphics.setColor(100, 200, 255, 255)

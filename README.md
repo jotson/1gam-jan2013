@@ -135,6 +135,8 @@ Updated HUD graphic. Bug fixes. Tweaked fuel collection rate.
 
 Added sound effect for completely mining an asteroid. Added bonus points with particles.
 
+Hours: 4
+
 ## January 17, 2013
 
 Learned about shaders today. Hacked together a bloom effect from code on the Love2D forum and got it working with Zoetrope. I made a small change to the Zoetrope library to get get it working but I don't know if the bug is with my code or with the library.
@@ -142,3 +144,13 @@ Learned about shaders today. Hacked together a bloom effect from code on the Lov
 After all that, I ended up turning the bloom effect off because my son thought the unbloomed version looked better. I left all the code in though. To turn it on just uncomment the setEffect() line in main.lua.
 
 Added a particle emitter to create a moving starfield on the play field. Using a particle emitter makes it trivially easy to manage hundreds of stars moving in the background. The illusion of depth is achieved by varying the size, brightness, and speed of each particle as it is generated.
+
+Hours: 2
+
+## January 18, 2013
+
+Rewrote how music is loaded. The old way created a new sound source on the fly as the music changed. That was causing the game to stutter whenever the music changed. The new way creates all of the sound sources up front.
+
+Spent some time compressing and normalizing the music in Audacity so I can get consistent volume throughout the game. I couldn't figure out how to do that in LMMS but it was easy enough to do it in post with Audacity.
+
+Hours: 4
