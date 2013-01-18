@@ -26,6 +26,7 @@ require 'zoetrope'
 require 'particles'
 require 'arena'
 require 'player'
+require 'starfield'
 require 'fuel'
 require 'hud'
 require 'enemy'
@@ -137,6 +138,9 @@ the.app = App:new{
             end
         }
         self:add(self.instr_spr)
+
+        self:add(starfield)
+        starfield:emit(200)
 
         self:add(player)
         self:add(arena)
