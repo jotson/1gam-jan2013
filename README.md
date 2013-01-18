@@ -142,5 +142,3 @@ Learned about shaders today. Hacked together a bloom effect from code on the Lov
 After all that, I ended up turning the bloom effect off because my son thought the unbloomed version looked better. I left all the code in though. To turn it on just uncomment the setEffect() line in main.lua.
 
 Added a particle emitter to create a moving starfield on the play field. Using a particle emitter makes it trivially easy to manage hundreds of stars moving in the background. The illusion of depth is achieved by varying the size, brightness, and speed of each particle as it is generated.
-
-And now I turned bloom back on. I can't decide which way I like it better.

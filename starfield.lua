@@ -31,13 +31,13 @@ starfield = Emitter:new{
 
 star = Fill:extend{
     MAX_SIZE = 3,
-    MAX_SPEED = 20,
-    MAX_BRIGHTNESS = 0.3,
+    MAX_SPEED = 40,
+    MAX_BRIGHTNESS = 0.6,
 
     fill = {255, 255, 255},
 
     onEmit = function (self)
-        local size = math.random(1,self.MAX_SIZE)
+        local size = math.random()*self.MAX_SIZE + 1
 
         -- Make more particles offscreen on the right where they
         -- are floating in from to prevent the starfield from having
@@ -45,13 +45,13 @@ star = Fill:extend{
         self.x = math.random(love.graphics.getWidth())*1.5
         self.y = math.random(love.graphics.getHeight())
 
-        -- Star movement is based on size
-        -- Bigger stars are brighter and move faster
+        -- Star movement is based on brightness
+        -- Brighter stars are closer and move faster
         self.width = size
         self.height = size
-        self.alpha = size/self.MAX_SIZE * self.MAX_BRIGHTNESS
-        self.velocity.x = -size/self.MAX_SIZE * self.MAX_SPEED + 1
+        self.alpha = math.random() * self.MAX_BRIGHTNESS
+        self.velocity.x = -self.alpha * self.MAX_SPEED - 1
     end
 }
 
-starfield:loadParticles(star, 300)
+starfield:loadParticles(star, 500)

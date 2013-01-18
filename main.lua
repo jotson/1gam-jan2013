@@ -62,7 +62,7 @@ the.app = App:new{
         hud.bg = love.graphics.newImage("img/hud.png")
 
         -- Uncomment this line to bloom the sprites in the play area
-        self.view:setEffect("vfx/bloom.shader", "screen")
+        -- self.view:setEffect("vfx/bloom.shader", "screen")
         
         love.mouse.setVisible(false)
 
@@ -146,7 +146,8 @@ the.app = App:new{
         self:add(self.instr_spr)
 
         self:add(starfield)
-        starfield:emit(200)
+        starfield:explode()
+        starfield.emitting = true
 
         self:add(player)
         self:add(arena)
