@@ -74,7 +74,7 @@ score = {
 
     getFuelPerMinute = function(self)
         local min = (os.time() - self.start_time) / 60
-        local fpm = self.level_total / min
+        local fpm = self.game_total / min
         if min == 0 then fpm = 0 end
         -- fpm = math.ceil(fpm*100)/100
         fpm = math.floor(fpm)

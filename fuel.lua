@@ -54,7 +54,7 @@ Fuel = Sprite:extend{
     onDraw = function(self, x, y)
         love.graphics.push()
 
-        love.graphics.setLineWidth(1)
+        love.graphics.setLineWidth(2)
 
         if self.state == self.STATE_EVAPORATING then
             love.graphics.setColor(255, 255, 255, 255 * math.random())

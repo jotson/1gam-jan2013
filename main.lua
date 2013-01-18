@@ -51,12 +51,13 @@ the.app = App:new{
 
         self.levelup_snd = love.audio.newSource("snd/levelup.ogg", "static")
         self.levelup_snd:setLooping(false)
+        self.levelup_snd:setVolume(0.75)
 
         self.start_overlay = love.graphics.newImage("img/start.png")
         hud.bg = love.graphics.newImage("img/hud.png")
 
         -- Uncomment this line to bloom the sprites in the play area
-        -- self.view:setEffect("vfx/bloom.shader", "screen")
+        self.view:setEffect("vfx/bloom.shader", "screen")
         
         love.mouse.setVisible(false)
 
@@ -192,7 +193,7 @@ the.app = App:new{
 
         -- Start music
         the.view.timer:every(10, function() self:changeMusic() end)
-        self:changeMusic(1)
+        self:changeMusic()
 
         -- Start game
         score:startGame()
