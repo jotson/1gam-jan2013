@@ -76,7 +76,7 @@ hud = {
 
             -- Score
             love.graphics.setFont(the.app.big_font)
-            local n = score:getScore()
+            local n = formatNumber(score:getScore())
             love.graphics.printf(n, 535, arena.height+43, 150, "center")
 
             -- Fuel tank

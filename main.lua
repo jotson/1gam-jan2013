@@ -41,7 +41,6 @@ the.app = App:new{
     name = "eins eins funf (115) :: #onegameamonth jan/2013",
     shake = 0,
     level = 1,
-    bgmusic = nil,
 
     onRun = function(self)
         self.small_font = love.graphics.newFont("fnt/jupiter.ttf", 16)
@@ -52,6 +51,12 @@ the.app = App:new{
         self.levelup_snd = love.audio.newSource("snd/levelup.ogg", "static")
         self.levelup_snd:setLooping(false)
         self.levelup_snd:setVolume(0.75)
+
+        self.songs = {
+            love.audio.newSource("snd/song1.ogg", "stream"),
+            love.audio.newSource("snd/song2.ogg", "stream"),
+            love.audio.newSource("snd/song3.ogg", "stream"),
+        }
 
         self.start_overlay = love.graphics.newImage("img/start.png")
         hud.bg = love.graphics.newImage("img/hud.png")
@@ -203,18 +208,26 @@ the.app = App:new{
     end,
 
     changeMusic = function(self, n)
-        if self.bgmusic == nil or self.bgmusic:isStopped() then
+        local playing = false
+        for i,song in pairs(self.songs) do
+            if not song:isStopped() then
+                playing = true
+                break
+            end
+        end
+        if not playing then
             if n == nil then
                 -- Try to choose a random song different than the last one
                 for i = 1,10 do
-                    n = math.random(1,3)
-                    if n ~= self.last_song then break end
+                    n = math.random(1,#self.songs)
+                    if n ~= self.last_song then
+                        break
+                    end
                 end
             end
             self.last_song = n
-            self.bgmusic = love.audio.newSource("snd/song"..n..".ogg", "stream")
-            self.bgmusic:setVolume(0.3)
-            love.audio.play(self.bgmusic)
+            self.songs[n]:setVolume(0.3)
+            love.audio.play(self.songs[n])
         end
     end,
 
@@ -233,6 +246,7 @@ the.app = App:new{
         end
 
         if state == self.STATE_GAMEOVER then
+            self.fpm = score:getFuelPerMinute()
             player.state = player.STATE_DEAD
 
             self.state = state
@@ -392,7 +406,7 @@ the.app = App:new{
 
         love.graphics.setFont(self.huge_font)
         love.graphics.setColor(255, 0, 0, 255)
-        love.graphics.printf("GAME OVER\nSCORE " .. score:getScore() .. "\nLEVEL " .. self.level, 0, arena.height/2 - 100, arena.width, "center")
+        love.graphics.printf("GAME OVER\nSCORE " .. formatNumber(score:getScore()) .. "\nFUEL/MINUTE " .. formatNumber(self.fpm) .. "\nLEVEL " .. self.level, 0, arena.height/2 - 100, arena.width, "center")
         love.graphics.setColor(255, 255, 255, blink_factor*200+55)
         love.graphics.printf("[SPACE] TO START OVER", 0, arena.height+10, arena.width, "center")
         love.graphics.printf("[ESC] TO QUIT", 0, arena.height+40, arena.width, "center")
@@ -414,3 +428,14 @@ the.app = App:new{
         self.shake = 0
     end,
 }
+
+function formatNumber(n)
+    local retval = ""
+    for i = 1,string.len(n) do
+        retval = string.sub(n, -i, -i) .. retval
+        if i % 3 == 0 and i < string.len(n) then
+            retval = ',' .. retval
+        end
+    end
+    return retval
+end
