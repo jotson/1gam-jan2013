@@ -6,7 +6,6 @@
 
 - Install LÖVE: https://love2d.org/
 - Download the game: https://dl.dropbox.com/u/7063628/1gam-jan2013-johnwatson.love
-https://dl.dropbox.com/u/7063628/1gam-jan2013-johnwatson.love
 - Double-click to run it
 
 OR
