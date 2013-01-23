@@ -1,14 +1,24 @@
 # Gameplay video
 
-- https://plus.google.com/photos/105783622938386957806/albums/5829323380128334929/5835277748884803986
+- [Watch video on Google+](https://plus.google.com/photos/105783622938386957806/albums/5829323380128334929/5835277748884803986)
 
 # Running the game
 
-- Install LÖVE: https://love2d.org/
-- Download the game: https://dl.dropbox.com/u/7063628/1gam-jan2013-johnwatson.love
+Linux/OSX/Windows
+
+- [Install LÖVE](https://love2d.org/)
+- [Download the game](https://dl.dropbox.com/u/7063628/115-1gam-johnwatson-1c9419e.love)
 - Double-click to run it
 
-OR
+Windows
+
+- Download:
+    - [32 bit](https://dl.dropbox.com/u/7063628/115-1gam-johnwatson-1c9419e_win-x86.zip)
+    - [64 bit](https://dl.dropbox.com/u/7063628/115-1gam-johnwatson-1c9419e_win-x64.zip)
+- Extract files
+- Run 115.exe
+
+Linux/OSX/Windows from source
 
 - Download the source files
 - Unzip, keeping the directory structure intact
