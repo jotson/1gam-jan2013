@@ -7,14 +7,14 @@
 Linux/OSX/Windows
 
 - [Install LÖVE](https://love2d.org/)
-- [Download the game](https://dl.dropbox.com/u/7063628/115-1gam-johnwatson-1c9419e.love)
+- [Download the game](http://flagrantdisregard.com/wp-content/uploads/2013/01/115-1gam-johnwatson-1c9419e.love)
 - Double-click to run it
 
 Windows
 
 - Download:
-    - [32 bit](https://dl.dropbox.com/u/7063628/115-1gam-johnwatson-1c9419e_win-x86.zip)
-    - [64 bit](https://dl.dropbox.com/u/7063628/115-1gam-johnwatson-1c9419e_win-x64.zip)
+    - [32 bit](http://flagrantdisregard.com/wp-content/uploads/2013/01/115-1gam-johnwatson-1c9419e_win-x86.zip)
+    - [64 bit](http://flagrantdisregard.com/wp-content/uploads/2013/01/115-1gam-johnwatson-1c9419e_win-x64.zip)
 - Extract files
 - Run 115.exe
 
